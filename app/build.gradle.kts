@@ -64,7 +64,7 @@ dependencies {
     // Timber
     implementation(libs.timber)
 
-   /* implementation(projects.core.presentation.designsystem)
+    implementation(projects.core.presentation.designsystem)
     implementation(projects.core.presentation.ui)
     implementation(projects.core.domain)
     implementation(projects.core.data)
@@ -74,10 +74,9 @@ dependencies {
     implementation(projects.auth.domain)
     implementation(projects.auth.data)
 
-    implementation(projects.run.presentation)
-    implementation(projects.run.domain)
-    implementation(projects.run.data)
-    implementation(projects.run.location)
-    implementation(projects.run.network)*/
+    implementation(projects.order.presentation)
+    implementation(projects.order.domain)
+    implementation(projects.order.data)
+    implementation(projects.order.network)
 
 }

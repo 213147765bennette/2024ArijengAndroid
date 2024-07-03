@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="arijeng">Arijeng</string>
+    <string name="welcome_to_arijeng">Welcome to Arijeng</string>
+    <string name="arijeng_description">"What do you want to have today? signup with us and get to enjoy our favourite meals. "</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Login</string>
+    <string name="example_email">example@test.com</string>
+    <string name="email">Email</string>
+    <string name="must_be_a_valid_email">Must be a valid email</string>
+    <string name="password">Password</string>
+    <string name="at_least_x_characters">At least %d characters</string>
+    <string name="at_least_one_number">At least one number</string>
+    <string name="contains_lowercase_char">Contains lowercase character</string>
+    <string name="contains_uppercase_char">Contains uppercase character</string>
+    <string name="register">Register</string>
+    <string name="error_email_exists">A user with that email already exists</string>
+    <string name="registration_successful">Registration is successful! You can login now</string>
+    <string name="hi_there">Hi there!</string>
+    <string name="arijeng_welcome_text">Welcome to your kasi culture food ordering app! Order and enjoy our secret ingredients that we have put in together while preparing your meal.</string>
+    <string name="dont_have_an_account">Don\'t have and account</string>
+    <string name="you_are_loggged_in">You\'re logged in</string>
+    <string name="error_email_password_incorrect">The email or password is incorrect</string>
+</resources>

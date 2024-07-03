@@ -57,8 +57,8 @@ internal fun Project.configureBuildTypes(
 }
 
 private fun BuildType.configureDebugBuildType(apiKey:String){
-    buildConfigField("String","API_KEY", "\"$apiKey\"")
-    buildConfigField("String","BASE_URL", "\"https://runique.pl-coding.com:8080\"")
+    //buildConfigField("String","API_KEY", "\"$apiKey\"")
+    buildConfigField("String","BASE_URL", "\"http://192.168.0.31:9091/api/v1\"")
 }
 
 private fun BuildType.configureReleaseBuildType(
@@ -66,7 +66,7 @@ private fun BuildType.configureReleaseBuildType(
     apiKey: String
 ) {
     buildConfigField("String", "API_KEY", "\"$apiKey\"")
-    buildConfigField("String", "BASE_URL", "\"https://runique.pl-coding.com:8080\"")
+    buildConfigField("String", "BASE_URL", "\"https://arijeng-app.herokuapp.com/api/v1/\"")
 
     isMinifyEnabled = true
     proguardFiles(

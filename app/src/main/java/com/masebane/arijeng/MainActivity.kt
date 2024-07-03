@@ -10,11 +10,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.masebane.arijeng.ui.theme.ArijengTheme
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
+import com.arijeng.core.presentation.designsystem.ArijengTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class MainActivity : ComponentActivity() {
+    private val viewModel by viewModel<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen().apply {
+            setKeepOnScreenCondition{
+                viewModel.state.isCheckingAuth
+            }
+        }
         setContent {
             ArijengTheme {
                 // A surface container using the 'background' color from the theme
@@ -22,7 +33,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+                    if (!viewModel.state.isCheckingAuth){
+                        NavigationRoot(
+                            navController = navController,
+                            isLoggedIn = viewModel.state.isLoggedIn
+                        )
+                    }
                 }
             }
         }
