@@ -12,11 +12,13 @@ https://appgallery.cloud.huawei.com/ag/n/app/C106882469?locale=en_US&source=apps
 
 See below screenshot of the updated app.
 
-![WhatsApp Image 2024-07-03 at 8 43 16 PM (1)](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/8012a653-2821-482a-b55c-b541c884ddbc)
 
+![WhatsApp Image 2024-07-07 at 12 22 13 AM](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/68ac944a-f931-4a1c-9d42-32bc014556cd)
 
-![WhatsApp Image 2024-07-03 at 8 43 16 PM](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/0d8facbf-0b45-4062-b297-71d2d3cfef2d)
+![WhatsApp Image 2024-07-07 at 12 22 12 AM (1)](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/999e32a7-44f6-41de-9613-730d2cd84a4c)
 
-![WhatsApp Image 2024-07-03 at 8 43 15 PM](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/461fe774-eb21-4a55-a426-0964ad99c611)
+![WhatsApp Image 2024-07-07 at 12 22 12 AM](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/550441a9-befa-405e-97ba-427df0abb99a)
 
-![WhatsApp Image 2024-07-03 at 8 43 15 PM (1)](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/f87acf81-2ab1-4a01-9eea-46c9afe6d7e2)
+![WhatsApp Image 2024-07-07 at 12 22 12 AM (3)](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/a448ff0c-d604-44c8-aa36-9e51408a9357)
+
+![WhatsApp Image 2024-07-07 at 12 22 12 AM (2)](https://github.com/213147765bennette/2024ArijengAndroid/assets/36039222/7eb88cd7-8339-4f76-967c-0273abe936bd)
