@@ -22,6 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.arijeng.core.presentation.designsystem.ArijengBlack
 import com.arijeng.core.presentation.designsystem.ArijengGray
+import com.arijeng.core.presentation.designsystem.ArijengGray40
+import com.arijeng.core.presentation.designsystem.ArijengLightGray
 
 
 /**
@@ -44,8 +46,7 @@ fun ArijengActionButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = ArijengGray,
-            disabledContentColor = ArijengBlack
+            disabledContainerColor = ArijengGray40
         ),
         shape = RoundedCornerShape(100f),
         modifier = modifier
@@ -66,6 +67,7 @@ fun ArijengActionButton(
             )
             Text(
                 text = text,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .alpha(if(isLoading) 0f else 1f),
                 fontWeight = FontWeight.Medium
@@ -86,11 +88,12 @@ fun ArijengOutLinedActionButton(
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground
+            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         border = BorderStroke(
             width = 0.5.dp,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.primary
         ),
         shape = RoundedCornerShape(100f),
         modifier = modifier
@@ -111,6 +114,7 @@ fun ArijengOutLinedActionButton(
             )
             Text(
                 text = text,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .alpha(if(isLoading) 0f else 1f),
                 fontWeight = FontWeight.Medium

@@ -1,7 +1,5 @@
 package com.arijeng.auth.domain
 
-import com.arijeng.auth.domain.PatternValidator
-
 
 /**
  * Created by {Bennette Molepo} on {2024/05/14}.
@@ -30,7 +28,24 @@ class UserDataValidator(
         )
     }
 
+    fun validateMobileNumber(mobileNumber: String): MobileNumberValidationState{
+        val hasMaxLength = mobileNumber.length >= MAX_MOBILE_NUMBER_LENGTH
+        return MobileNumberValidationState(hasMaxLength = hasMaxLength)
+    }
+
+    fun validateFirstNames(firstName: String): FirstNameValidationState{
+        val hasFirstNameMinLength = firstName.length  >= MIN_USERNAME_LENGTH
+        return FirstNameValidationState(hasFirstNameMinLength = hasFirstNameMinLength)
+    }
+
+    fun validateLastNames(lastName:String): LastNameValidationState{
+        val hasLastNameMinLength = lastName.length  >= MIN_USERNAME_LENGTH
+        return LastNameValidationState(hasLastNameMinLength = hasLastNameMinLength)
+    }
+
     companion object {
         const val MIN_PASSWORD_LENGTH = 9
+        const val MAX_MOBILE_NUMBER_LENGTH = 10
+        const val MIN_USERNAME_LENGTH = 3
     }
 }

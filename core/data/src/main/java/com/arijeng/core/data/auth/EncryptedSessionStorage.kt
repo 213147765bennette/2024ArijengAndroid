@@ -3,6 +3,7 @@ package com.arijeng.core.data.auth
 import android.content.SharedPreferences
 import com.arijeng.core.domain.AuthInfo
 import com.arijeng.core.domain.SessionStorage
+import com.arijeng.core.domain.UserInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
@@ -42,7 +43,33 @@ class EncryptedSessionStorage(
         }
     }
 
+    override suspend fun getUserInfo(): UserInfo? {
+        return withContext(Dispatchers.IO){
+            val json = sharedPreferences.getString(KEY_USER_INFO, null)
+            json?.let {
+                Json.decodeFromString<UserInfoSerializable?>(it)?.toUserInfo()
+            }
+        }
+    }
+
+    override suspend fun setUserInfo(info: UserInfo?) {
+        withContext(Dispatchers.IO){
+            if (info == null){
+                sharedPreferences.edit().remove(KEY_USER_INFO).apply()
+                return@withContext
+            }
+            val json = Json.encodeToString(info.toUserInfoSerializable())
+
+            sharedPreferences
+                .edit()
+                .putString(KEY_USER_INFO, json)
+                .apply()
+
+        }
+    }
+
     companion object{
         private const val KEY_AUTH_INFO = "KEY_AUTH_INFO"
+        private const val KEY_USER_INFO = "KEY_USER_INFO"
     }
 }

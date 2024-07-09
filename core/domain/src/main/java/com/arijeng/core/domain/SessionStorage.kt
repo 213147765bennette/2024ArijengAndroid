@@ -9,4 +9,6 @@ package com.arijeng.core.domain
 interface SessionStorage {
     suspend fun get(): AuthInfo?
     suspend fun set(info: AuthInfo?)
+    suspend fun getUserInfo(): UserInfo?
+    suspend fun setUserInfo(info: UserInfo?)
 }

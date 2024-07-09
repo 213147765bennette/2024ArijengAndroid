@@ -35,6 +35,10 @@ val EmailIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.email)
 
+val PhoneIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.icon_phone)
+
 val ExclamationMarkIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.danger)

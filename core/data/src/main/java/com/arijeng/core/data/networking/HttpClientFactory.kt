@@ -50,9 +50,9 @@ class HttpClientFactory(
             }
             defaultRequest {
                 contentType(ContentType.Application.Json)
-                //header("x-api-key", BuildConfig.API_KEY)
+                header("Content-Type", "application/json")
             }
-            install(Auth){
+       /*     install(Auth){
                 bearer {
                     loadTokens {
                         val info = sessionStorage.get()
@@ -90,7 +90,7 @@ class HttpClientFactory(
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }

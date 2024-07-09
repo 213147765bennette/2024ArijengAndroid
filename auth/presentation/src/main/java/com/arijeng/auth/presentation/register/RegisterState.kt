@@ -4,6 +4,9 @@ package com.arijeng.auth.presentation.register
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text2.input.TextFieldState
+import com.arijeng.auth.domain.FirstNameValidationState
+import com.arijeng.auth.domain.LastNameValidationState
+import com.arijeng.auth.domain.MobileNumberValidationState
 import com.arijeng.auth.domain.PasswordValidationState
 
 
@@ -13,8 +16,14 @@ import com.arijeng.auth.domain.PasswordValidationState
  * Email address {bennette.molepo@multichoice.com}
  */
 data class RegisterState(
+    val firstName: TextFieldState = TextFieldState(),
+    val lastName: TextFieldState = TextFieldState(),
     val email: TextFieldState = TextFieldState(),
+    val mobileNumber: TextFieldState = TextFieldState(),
     val isEmailValid: Boolean = false,
+    val firstNameValidationState: FirstNameValidationState = FirstNameValidationState(),
+    val lastNameValidationState: LastNameValidationState = LastNameValidationState(),
+    val mobileNumberValidationState: MobileNumberValidationState = MobileNumberValidationState(),
     val password: TextFieldState = TextFieldState(),
     val isPasswordVisible: Boolean = false,
     val passwordValidationState: PasswordValidationState = PasswordValidationState(),

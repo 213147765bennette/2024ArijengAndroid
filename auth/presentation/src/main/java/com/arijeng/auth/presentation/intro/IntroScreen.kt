@@ -68,13 +68,14 @@ fun IntroScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.welcome_to_arijeng),
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 20.sp
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = R.string.arijeng_description),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
             Spacer(modifier = Modifier.height(32.dp))
             ArijengOutLinedActionButton(
@@ -107,17 +108,17 @@ fun ArijengLogoVertical(
     ) {
         Icon(
             modifier = modifier
-                .size(50.dp),
+                .size(70.dp),
             imageVector = ArijengIcon,
             contentDescription = "Logo",
-            tint = MaterialTheme.colorScheme.onBackground
+            tint = MaterialTheme.colorScheme.primary
             )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = stringResource(id = R.string.arijeng),
             fontSize = 24.sp,
             fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }

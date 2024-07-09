@@ -79,7 +79,7 @@ fun ArijengTextField(
             if(title != null) {
                 Text(
                     text = title,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
             if(error != null) {
@@ -91,7 +91,7 @@ fun ArijengTextField(
             } else if(additionalInfo != null) {
                 Text(
                     text = additionalInfo,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 12.sp
                 )
             }

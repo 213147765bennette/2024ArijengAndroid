@@ -78,7 +78,7 @@ fun ArijengPasswordTextField(
             if (title != null) {
                 Text(
                     text = title,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

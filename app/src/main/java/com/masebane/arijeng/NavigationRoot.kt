@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.arijeng.auth.presentation.intro.IntroScreenRoot
 import com.arijeng.auth.presentation.login.LoginScreenRoot
+import com.arijeng.auth.presentation.otp.OTPScreenRoot
 import com.arijeng.auth.presentation.register.RegisterScreenRoot
 
 
@@ -57,6 +58,13 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController){
                     }
                 },
                 onSuccessfulRegistration = {
+                    navController.navigate("otp")
+                }
+            )
+        }
+        composable("otp"){
+            OTPScreenRoot(
+                onSuccessfulOTPConfirmation = {
                     navController.navigate("login")
                 }
             )
@@ -90,7 +98,7 @@ private fun NavGraphBuilder.homeGraph(navController: NavHostController){
         route = "home"
     ){
         composable("home_overview"){
-           //RunOverviewScreenRoot()
+           //HomeOverviewScreenRoot()
         }
     }
 }

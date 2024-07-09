@@ -59,6 +59,8 @@ internal fun Project.configureBuildTypes(
 private fun BuildType.configureDebugBuildType(apiKey:String){
     //buildConfigField("String","API_KEY", "\"$apiKey\"")
     buildConfigField("String","BASE_URL", "\"http://192.168.0.31:9091/api/v1\"")
+    //Home ip: 192.168.0.31
+    //office ip: 10.50.113.113
 }
 
 private fun BuildType.configureReleaseBuildType(

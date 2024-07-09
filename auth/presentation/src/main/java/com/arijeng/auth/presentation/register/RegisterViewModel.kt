@@ -1,5 +1,7 @@
 @file:Suppress("OPT_IN_USAGE_FUTURE_ERROR")
-@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class
+)
 
 package com.arijeng.auth.presentation.register
 
@@ -41,12 +43,42 @@ class RegisterViewModel(
     val events = eventChannel.receiveAsFlow()
 
     init {
+        state.firstName.textAsFlow()
+            .onEach { firstName ->
+                val firstNameValidationState = userDataValidator.validateFirstNames(firstName.toString())
+                state = state.copy(
+                    firstNameValidationState = firstNameValidationState,
+                    canRegister = canRegisterNow()
+                    //firstNameValidationState.hasFirstNameMinLength && state.passwordValidationState.isValidPassword && !state.isRegistering
+                )
+            }
+            .launchIn(viewModelScope)
+
+        state.lastName.textAsFlow()
+            .onEach { lastName ->
+                val lastNameValidationState = userDataValidator.validateLastNames(lastName.toString())
+                state = state.copy(
+                    lastNameValidationState = lastNameValidationState,
+                    canRegister = canRegisterNow()
+                )
+            }
+            .launchIn(viewModelScope)
+
+        state.mobileNumber.textAsFlow()
+            .onEach { mobileNumber ->
+                val mobileNumberValidationState = userDataValidator.validateMobileNumber(mobileNumber.toString())
+                state = state.copy(
+                    mobileNumberValidationState = mobileNumberValidationState,
+                    canRegister = canRegisterNow()
+                )
+            }
+            .launchIn(viewModelScope)
         state.email.textAsFlow()
             .onEach { email ->
                 val isValidEmail = userDataValidator.isValidEmail(email.toString())
                 state = state.copy(
                     isEmailValid = isValidEmail,
-                    canRegister = isValidEmail && state.passwordValidationState.isValidPassword && !state.isRegistering
+                    canRegister = canRegisterNow()
                 )
             }
             .launchIn(viewModelScope)
@@ -56,11 +88,17 @@ class RegisterViewModel(
                 val passwordValidationState = userDataValidator.validatePassword(password.toString())
                 state = state.copy(
                     passwordValidationState =  passwordValidationState,
-                    canRegister = state.isEmailValid && passwordValidationState.isValidPassword && !state.isRegistering
+                    canRegister = canRegisterNow()
                 )
             }
             .launchIn(viewModelScope)
     }
+
+    private fun canRegisterNow() =
+        state.firstNameValidationState.hasFirstNameMinLength && state.lastNameValidationState.hasLastNameMinLength
+                && state.mobileNumberValidationState.isValidMobileNumber && state.isEmailValid
+                && state.passwordValidationState.isValidPassword && !state.isRegistering
+
     //from UI to viewmodel
     fun onAction(action: RegisterAction){
         when(action){
@@ -78,7 +116,10 @@ class RegisterViewModel(
         viewModelScope.launch {
             state = state.copy(isRegistering = true)
             val result = authRepository.register(
+                firstName = state.firstName.text.toString(),
+                lastName = state.lastName.text.toString(),
                 email = state.email.text.toString().trim(),
+                phone = state.mobileNumber.text.toString(),
                 password = state.password.text.toString()
             )
             state = state.copy(isRegistering = false)

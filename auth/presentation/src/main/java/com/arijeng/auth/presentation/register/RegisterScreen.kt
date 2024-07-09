@@ -41,10 +41,10 @@ import com.arijeng.core.presentation.designsystem.CrossIcon
 import com.arijeng.core.presentation.designsystem.EmailIcon
 import com.arijeng.core.presentation.designsystem.Poppins
 import com.arijeng.core.presentation.designsystem.ArijengDarkRed
-import com.arijeng.core.presentation.designsystem.ArijengGray
-import com.arijeng.core.presentation.designsystem.ArijengOrange
 import com.arijeng.core.presentation.designsystem.ArijengOrange
 import com.arijeng.core.presentation.designsystem.ArijengTheme
+import com.arijeng.core.presentation.designsystem.PersonIcon
+import com.arijeng.core.presentation.designsystem.PhoneIcon
 import com.arijeng.core.presentation.designsystem.components.GradientBackground
 import com.arijeng.core.presentation.designsystem.components.ArijengActionButton
 import com.arijeng.core.presentation.designsystem.components.ArijengPasswordTextField
@@ -99,7 +99,7 @@ private fun RegisterScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .padding(vertical = 32.dp)
-                .padding(top = 16.dp)
+                .padding(top = 14.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.create_account),
@@ -109,7 +109,7 @@ private fun RegisterScreen(
                 withStyle(
                     style = SpanStyle(
                         fontFamily = Poppins,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     append(stringResource(id = R.string.already_have_an_account) + " ")
@@ -120,7 +120,7 @@ private fun RegisterScreen(
                     withStyle(
                         style = SpanStyle(
                             fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontFamily = Poppins
                         )
                     ) {
@@ -140,7 +140,45 @@ private fun RegisterScreen(
                     }
                 }
             )
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(40.dp))
+            ArijengTextField(
+                state = state.firstName,
+                startIcon = PersonIcon,
+                endIcon = if (state.firstNameValidationState.hasFirstNameMinLength) {
+                    CheckIcon
+                } else null,
+                hint = stringResource(id = R.string.example_firstname),
+                title = stringResource(id = R.string.firstname),
+                modifier = Modifier.fillMaxWidth(),
+                keyboardType = KeyboardType.Text
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+            ArijengTextField(
+                state = state.lastName,
+                startIcon = PersonIcon,
+                endIcon = if (state.lastNameValidationState.hasLastNameMinLength) {
+                    CheckIcon
+                } else null,
+                hint = stringResource(id = R.string.example_lastname),
+                title = stringResource(id = R.string.lastname),
+                modifier = Modifier.fillMaxWidth(),
+                keyboardType = KeyboardType.Text
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+            ArijengTextField(
+                state = state.mobileNumber,
+                startIcon = PhoneIcon,
+                endIcon = if (state.mobileNumberValidationState.isValidMobileNumber) {
+                    CheckIcon
+                } else null,
+                hint = stringResource(id = R.string.example_mobile),
+                title = stringResource(id = R.string.mobile),
+                modifier = Modifier.fillMaxWidth(),
+                keyboardType = KeyboardType.Phone
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
             ArijengTextField(
                 state = state.email,
                 startIcon = EmailIcon,
@@ -153,7 +191,7 @@ private fun RegisterScreen(
                 additionalInfo = stringResource(id = R.string.must_be_a_valid_email),
                 keyboardType = KeyboardType.Email
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             ArijengPasswordTextField(
                 state = state.password,
                 isPasswordVisible = state.isPasswordVisible,
@@ -164,37 +202,39 @@ private fun RegisterScreen(
                 title = stringResource(id = R.string.password),
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(16.dp))
+
+
+            Spacer(modifier = Modifier.height(14.dp))
 
             PasswordRequirement(
                 text = stringResource(
                     id = R.string.at_least_x_characters,
                     UserDataValidator.MIN_PASSWORD_LENGTH
                 ),
-                isValid = state.passwordValidationState.hasMinLength
+                isValid = state.passwordValidationState.hasMinLength &&  state.passwordValidationState.hasNumber
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            /*Spacer(modifier = Modifier.height(4.dp))
             PasswordRequirement(
                 text = stringResource(
                     id = R.string.at_least_one_number,
                 ),
                 isValid = state.passwordValidationState.hasNumber
-            )
+            )*/
             Spacer(modifier = Modifier.height(4.dp))
             PasswordRequirement(
                 text = stringResource(
                     id = R.string.contains_lowercase_char,
                 ),
-                isValid = state.passwordValidationState.hasLowerCaseCharacter
+                isValid = state.passwordValidationState.hasLowerCaseCharacter && state.passwordValidationState.hasUpperCaseCharacter
             )
-            Spacer(modifier = Modifier.height(4.dp))
+           /* Spacer(modifier = Modifier.height(4.dp))
             PasswordRequirement(
                 text = stringResource(
                     id = R.string.contains_uppercase_char,
                 ),
                 isValid = state.passwordValidationState.hasUpperCaseCharacter
-            )
-            Spacer(modifier = Modifier.height(32.dp))
+            )*/
+            Spacer(modifier = Modifier.height(28.dp))
             ArijengActionButton(
                 text = stringResource(id = R.string.register),
                 isLoading = state.isRegistering,

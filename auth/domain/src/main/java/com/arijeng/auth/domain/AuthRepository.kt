@@ -12,5 +12,6 @@ import com.arijeng.core.domain.util.EmptyResult
 interface AuthRepository {
 
     suspend fun login(email: String, password: String): EmptyResult<DataError.Network>
-    suspend fun register(email: String, password: String): EmptyResult<DataError.Network>
+    suspend fun register(firstName: String,lastName: String,email: String,phone: String, password: String): EmptyResult<DataError.Network>
+    suspend fun verifyOTP(mobileNumber: String, otpCode: String): EmptyResult<DataError.Network>
 }

@@ -108,7 +108,7 @@ fun LoginScreen(
             Text(
                 text = stringResource(id = R.string.arijeng_welcome_text),
                 fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(48.dp))
 

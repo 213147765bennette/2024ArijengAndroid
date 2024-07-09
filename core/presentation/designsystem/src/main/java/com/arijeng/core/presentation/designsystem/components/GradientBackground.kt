@@ -61,7 +61,7 @@ fun GradientBackground(
                 .fillMaxSize()
                 .then(
                     if (isAtLeastAndroid12) {
-                        Modifier.blur(smallDimension / 6f)
+                        Modifier.blur(smallDimension / 10f)
                     } else Modifier
                 )
                 .background(
@@ -74,7 +74,7 @@ fun GradientBackground(
                             x = screenWidthPx / 2f,
                             y = -10f
                         ),
-                        radius = smallDimensionPx / 1.5f
+                        radius = smallDimensionPx / 1f
                     )
                 )
         )

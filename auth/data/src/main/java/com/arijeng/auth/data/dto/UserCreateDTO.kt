@@ -1,4 +1,4 @@
-package com.arijeng.auth.data
+package com.arijeng.auth.data.dto
 
 import kotlinx.serialization.Serializable
 
@@ -9,7 +9,10 @@ import kotlinx.serialization.Serializable
  * Email address {bennette.molepo@multichoice.com}
  */
 @Serializable
-data class RegisterRequest(
+data class UserCreateDTO(
+    val firstName: String,
+    val lastName: String,
     val email: String,
-    val password: String
+    val phone: String,
+    val pwd: CharArray
 )
