@@ -16,6 +16,5 @@ data class UserInfoSerializable(
     val email: String,
     val phone: String,
     val status: String,
-    val roles: Set<String>,
-    val accessToken: String
+    val roles: Set<String>
 )

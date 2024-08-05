@@ -27,6 +27,15 @@ class EncryptedSessionStorage(
         }
     }
 
+    override suspend fun getUserInfo(): UserInfo? {
+        return withContext(Dispatchers.IO){
+            val json = sharedPreferences.getString(KEY_USER_INFO, null)
+            json?.let {
+                Json.decodeFromString<UserInfoSerializable?>(it)?.toUserInfo()
+            }
+        }
+    }
+
     override suspend fun set(info: AuthInfo?) {
         withContext(Dispatchers.IO){
             if (info == null){
@@ -40,15 +49,6 @@ class EncryptedSessionStorage(
                 .putString(KEY_AUTH_INFO, json)
                 .apply()
 
-        }
-    }
-
-    override suspend fun getUserInfo(): UserInfo? {
-        return withContext(Dispatchers.IO){
-            val json = sharedPreferences.getString(KEY_USER_INFO, null)
-            json?.let {
-                Json.decodeFromString<UserInfoSerializable?>(it)?.toUserInfo()
-            }
         }
     }
 

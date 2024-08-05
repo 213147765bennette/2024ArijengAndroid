@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.arijeng.android.library)
     alias(libs.plugins.arijeng.jvm.ktor)
+    //alias(libs.plugins.ktorfit)
 }
 
 android {
@@ -14,4 +15,7 @@ dependencies {
 
     implementation(projects.core.domain)
     implementation(projects.core.database)
+
+    implementation(libs.bundles.ktor)
+    implementation(libs.bundles.ktorfit)
 }

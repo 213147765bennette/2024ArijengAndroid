@@ -2,45 +2,47 @@
 agp = "8.3.2"
 coreKtx = "1.13.1"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
 activityCompose = "1.9.0"
 #composeBom = "2023.08.00"
 
 #-------------------------------Arijeng----versions---------------------------------------------------------------------------------
-androidTools = "31.2.2"
+androidTools = "31.5.0"
 core = "1.10.3"
-playCore = "1.10.3"
+playCore = "19.0.0"
 coreSplashscreen = "1.0.1"
 coilCompose = "2.6.0"
 composeCompiler = "1.5.9"
 desugar_jdk_libs = "2.0.4"
-kotlin = "1.9.22"
-ktor = "2.3.8"
+ktorfit = "2.0.0"
+ktorfitGradlePlugin = "2.0.0"
+kotlin = "2.0.0"
+ksp = "1.9.22-1.0.17"
+ktor = "2.3.11"
 ktorClientLogging = "2.3.8"
 ktorServerCallLogging = "2.3.7"
-koin = "3.5.3"
-lifecycleRuntimeKtx = "2.7.0"
-composeBom = "2024.05.00"
-materialIconsExtended = "1.6.3"
+koin = "3.5.6"
+lifecycleRuntimeKtx = "2.8.3"
+composeBom = "2024.06.00"
+materialIconsExtended = "1.6.8"
 navigationCompose = "2.7.7"
 securityCryptoKtx = "1.1.0-alpha06"
 timber = "5.0.1"
-ksp = "1.9.22-1.0.17"
 room = "2.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 org-jetbrains-kotlin-jvm = "1.9.22"
 maps = "4.3.3"
 coroutines = "1.8.0"
-gmsLocation = "21.2.0"
+gmsLocation = "21.3.0"
 mapsUtils = "5.0.0"
 bson = "4.11.1"
 work = "2.9.0"
 kotlinx-serialization = "1.6.3"
 secretsPlugin = "2.0.1"
-playServicesMaps = "18.2.0"
-annotation = "1.7.1"
+playServicesMaps = "19.0.0"
+annotation = "1.8.0"
 
 # Project versions
 projectApplicationId = "com.masebane.arijeng"
@@ -100,6 +102,13 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientLogging" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktorServerCallLogging" }
+
+
+
+ktorfit-converters-response = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-response", version.ref = "ktorfit" }
+ktorfit-converters-call = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-call", version.ref = "ktorfit" }
+ktorfit-converters-flow = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-flow", version.ref = "ktorfit" }
+
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -118,6 +127,9 @@ android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", ver
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+ktorfit-gradle-plugin = { module = "de.jensklingenberg.ktorfit:ktorfit-gradle-plugin", version.ref = "ktorfit" }
+
+
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
 
 [plugins]
@@ -128,6 +140,7 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+#ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 room = { id = "androidx.room", version.ref = "room" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
@@ -166,4 +179,10 @@ ktor = [
     "ktor-client-core",
     "ktor-client-logging",
     "ktor-serialization-kotlinx-json"
+]
+
+ktorfit = [
+   "ktorfit-converters-response",
+   "ktorfit-converters-call",
+   "ktorfit-converters-flow"
 ]

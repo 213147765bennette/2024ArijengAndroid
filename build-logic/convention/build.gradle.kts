@@ -11,6 +11,7 @@ dependencies {
     compileOnly(libs.android.tools.common)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.bundles.ktorfit)
     compileOnly(libs.room.gradlePlugin)
 }
 

@@ -12,6 +12,7 @@ import com.arijeng.core.domain.util.EmptyResult
 import com.arijeng.core.domain.util.Result
 import com.arijeng.core.domain.util.asEmptyDataResult
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.callContext
 
 
 /**
@@ -69,8 +70,7 @@ class AuthRepositoryImpl(
                     email = result.data.email,
                     phone = result.data.phone,
                     status = result.data.status,
-                    roles = result.data.roles,
-                    accessToken = result.data.token
+                    roles = result.data.roles
                 )
             )
         }
@@ -82,6 +82,7 @@ class AuthRepositoryImpl(
         mobileNumber: String,
         otpCode: String
     ): EmptyResult<DataError.Network> {
+
         return httpClient.post<VerifyOTPRequest, Unit>(
             route = "auth/verify/{mobile}/{code}",
             body = VerifyOTPRequest(

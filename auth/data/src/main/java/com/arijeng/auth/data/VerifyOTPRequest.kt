@@ -12,5 +12,4 @@ import kotlinx.serialization.Serializable
 data class VerifyOTPRequest(
     val mobileNumber: String,
     val otpCode: String
-) {
-}
+)

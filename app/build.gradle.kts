@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.arijeng.android.application.compose)
     alias(libs.plugins.arijeng.jvm.ktor)
     alias(libs.plugins.mapsplatform.secrets.plugin)
+    //alias(libs.plugins.ktorfit)
+    alias(libs.plugins.ksp)
 }
 
 android {

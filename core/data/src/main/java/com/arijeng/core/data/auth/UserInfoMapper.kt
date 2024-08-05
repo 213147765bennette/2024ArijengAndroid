@@ -1,7 +1,5 @@
 package com.arijeng.core.data.auth
 
-import com.arijeng.core.domain.AuthInfo
-import com.arijeng.core.data.auth.AuthInfoSerializable
 import com.arijeng.core.domain.UserInfo
 
 
@@ -19,8 +17,7 @@ fun UserInfo.toUserInfoSerializable(): UserInfoSerializable {
         email = email,
         phone = phone,
         status = status,
-        roles = roles,
-        accessToken = accessToken
+        roles = roles
     )
 }
 
@@ -33,7 +30,6 @@ fun UserInfoSerializable.toUserInfo(): UserInfo{
         email = email,
         phone = phone,
         status = status,
-        roles = roles,
-        accessToken = accessToken
+        roles = roles
     )
 }

@@ -13,6 +13,6 @@ data class UserDTO(
     var phone: String,
     var status: String,
     var roles: Set<String>,
-    var codeConfirmationDTO: CodeConfirmationDTO,
-    var token: String
+    var codeConfirmationDTO: CodeConfirmationDTO? = null,
+    var token: String? = null
 )

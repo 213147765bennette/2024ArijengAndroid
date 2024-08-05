@@ -1,8 +1,12 @@
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
+
 package com.arijeng.auth.presentation.otp
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +19,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text2.BasicTextField2
+import androidx.compose.foundation.text2.input.TextFieldLineLimits
+import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.*
@@ -24,7 +31,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -70,6 +80,7 @@ fun OTPScreenRoot(
             }
         }
     }
+
     OTPScreen(
         state = viewModel.state,
         onAction = viewModel::onAction
@@ -116,7 +127,7 @@ private fun OTPScreen(
             ArijengActionButton(
                 text = stringResource(id = R.string.confirm),
                 isLoading = state.isOTPConfirming,
-                enabled = state.canConfirmOTP && !state.isOTPConfirming,
+                enabled = true,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     onAction(OTPAction.OnConfirmOTPClick)
@@ -149,7 +160,7 @@ fun OtpTextField(
                 onOtpTextChange.invoke(it.text, it.text.length == otpCount)
             }
         },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         decorationBox = {
             Row(
                 modifier
@@ -204,7 +215,7 @@ private fun CharView(
 
 @Preview
 @Composable
-private fun LoginScreenPreview() {
+private fun OTPScreenPreview() {
     ArijengTheme {
         OTPScreen(
             state = OTPState(),

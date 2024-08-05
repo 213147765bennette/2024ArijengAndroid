@@ -5,6 +5,7 @@ import com.arijeng.auth.data.di.authDataModule
 import com.arijeng.auth.presentation.BuildConfig
 import com.arijeng.auth.presentation.di.authViewModelModule
 import com.arijeng.core.data.di.coreDataModule
+import com.arijeng.order.presentation.di.orderViewModelModule
 import com.masebane.arijeng.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -32,7 +33,7 @@ class ArijengApp: Application() {
                 authViewModelModule,
                 appModule,
                 coreDataModule,
-                //orderViewModelModule
+                orderViewModelModule
             )
         }
     }

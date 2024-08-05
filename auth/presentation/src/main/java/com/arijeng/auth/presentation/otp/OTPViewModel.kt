@@ -3,6 +3,7 @@
 
 package com.arijeng.auth.presentation.otp
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text2.input.textAsFlow
 import androidx.compose.runtime.getValue
@@ -49,18 +50,29 @@ class OTPViewModel(
     val events = eventChannel.receiveAsFlow()
 
     init {
+      /*  state.otpFieldOne.textAsFlow()
+            .onEach { otpFieldOne ->
+                state = state.copy(
+                    canConfirmOTP = isOTPValid()
+                )
+            }
+            .launchIn(viewModelScope)*/
         combine(
             state.otpFieldOne.textAsFlow(),
             state.otpFieldTwo.textAsFlow(),
             state.otpFieldThree.textAsFlow(),
             state.otpFieldFour.textAsFlow()
         ) { fieldOne, fieldTwo, fieldThree, fieldFour ->
+            Log.d("---otpcode","$fieldOne $fieldTwo $fieldThree $fieldFour")
             state = state.copy(
-                canConfirmOTP = fieldOne.isNotEmpty() && fieldTwo.isNotEmpty() && fieldThree.isNotEmpty() && fieldFour.isNotEmpty()
+                canConfirmOTP = isOTPValid()
+                //fieldOne.isNotEmpty() && fieldTwo.isNotEmpty() && fieldThree.isNotEmpty() && fieldFour.isNotEmpty()
             )
         }.launchIn(viewModelScope)
-
     }
+
+    private fun isOTPValid() = (state.otpFieldOne.text.isNotEmpty() && state.otpFieldTwo.text.isNotEmpty()
+            && state.otpFieldThree.text.isNotEmpty() && state.otpFieldFour.text.isNotEmpty())
 
     //from UI to viewmodel
     fun onAction(action: OTPAction) {

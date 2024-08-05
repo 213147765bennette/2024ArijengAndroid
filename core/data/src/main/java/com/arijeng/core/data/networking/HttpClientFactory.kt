@@ -1,14 +1,8 @@
 package com.arijeng.core.data.networking
 
-import com.arijeng.core.data.BuildConfig
-import com.arijeng.core.domain.AuthInfo
 import com.arijeng.core.domain.SessionStorage
-import com.arijeng.core.domain.util.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -48,10 +42,13 @@ class HttpClientFactory(
                 }
                 level = LogLevel.ALL
             }
+
             defaultRequest {
                 contentType(ContentType.Application.Json)
                 header("Content-Type", "application/json")
             }
+
+
        /*     install(Auth){
                 bearer {
                     loadTokens {
@@ -92,5 +89,10 @@ class HttpClientFactory(
                 }
             }*/
         }
+
+
     }
+
+
+
 }

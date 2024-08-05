@@ -1,13 +1,15 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    //alias(libs.plugins.android.library)
+    //alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.arijeng.android.library)
+
 }
 
 android {
     namespace = "com.arijeng.order.data"
     compileSdk = 34
 
-    defaultConfig {
+   /* defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -29,15 +31,20 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
+    }*/
 }
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.google.android.gms.play.services.location)
+    implementation(libs.androidx.work)
+    implementation(libs.koin.android.workmanager)
+    implementation(libs.kotlinx.serialization.json)
+
+
+    implementation(projects.core.domain)
+    implementation(projects.core.database)
+    implementation(projects.order.domain)
+
 }

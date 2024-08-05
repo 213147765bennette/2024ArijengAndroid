@@ -87,6 +87,7 @@ fun RegisterScreenRoot(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun RegisterScreen(
     state: RegisterState,

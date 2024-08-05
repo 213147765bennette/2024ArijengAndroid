@@ -49,7 +49,6 @@ class RegisterViewModel(
                 state = state.copy(
                     firstNameValidationState = firstNameValidationState,
                     canRegister = canRegisterNow()
-                    //firstNameValidationState.hasFirstNameMinLength && state.passwordValidationState.isValidPassword && !state.isRegistering
                 )
             }
             .launchIn(viewModelScope)
