@@ -16,6 +16,9 @@ jobs:
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4.2.2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -24,4 +27,4 @@ jobs:
         uses: actions/upload-artifact@v4.3.5
         with:
           name: Arijeng.apk
-          path: app/build/outputs/apk/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
