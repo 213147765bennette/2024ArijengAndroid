@@ -1,5 +1,6 @@
 package com.arijeng.order.presentation.di
 
+import com.arijeng.order.presentation.arijeng_overview.ArijengOverviewViewModel
 import com.arijeng.order.presentation.order_overview.OrderOverviewViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
@@ -9,5 +10,7 @@ import org.koin.dsl.module
  * Email address {bennette.molepo@multichoice.com}
  */
 val orderViewModelModule = module {
+
+    viewModelOf(::ArijengOverviewViewModel)
     viewModelOf(::OrderOverviewViewModel)
 }

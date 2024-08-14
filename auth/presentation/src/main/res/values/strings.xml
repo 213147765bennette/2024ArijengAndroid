@@ -25,7 +25,7 @@
     <string name="register">Register</string>
     <string name="confirm">Confirm</string>
     <string name="error_email_exists">A user with that email already exists</string>
-    <string name="error_wrong_otp">A wrong otp number has been entered</string>
+    <string name="error_wrong_otp">Invalid code was entered, please use the correct code</string>
     <string name="registration_successful">Wrap up your Registration by confirming the otp received.</string>
     <string name="otp_confirmation_successful">Registration is successful! You can login now</string>
     <string name="otp_confirmation_title">Confirm account</string>

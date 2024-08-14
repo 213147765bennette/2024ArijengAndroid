@@ -12,6 +12,9 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.Parameters
+import io.ktor.http.contentType
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.SerializationException
@@ -40,11 +43,18 @@ suspend inline fun <reified Response: Any> HttpClient.get(
 
 suspend inline fun <reified Request, reified Response: Any> HttpClient.post(
     route: String,
-    body: Request
+    body: Request,
+    queryParameters: Map<String, Any?> = mapOf()
 ): Result<Response, DataError.Network> {
     return safeCall {
         post {
             url(constructRoute(route))
+            contentType(ContentType.Application.Json)
+            if (queryParameters.isNotEmpty()){
+                queryParameters.forEach { (key, value) ->
+                    parameter(key, value)
+                }
+            }
             setBody(body)
         }
     }

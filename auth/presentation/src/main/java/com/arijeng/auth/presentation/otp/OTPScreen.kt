@@ -2,6 +2,7 @@
 
 package com.arijeng.auth.presentation.otp
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text2.BasicTextField2
+import androidx.compose.foundation.text2.input.InputTransformation
 import androidx.compose.foundation.text2.input.TextFieldLineLimits
 import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
@@ -28,6 +30,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -116,12 +119,25 @@ private fun OTPScreen(
             )
             Spacer(modifier = Modifier.height(50.dp))
 
-            OtpTextField(
-                otpText = otpValue,
-                onOtpTextChange = { value, _ ->
-                    otpValue = value
+            val otpStates = listOf(state.otpFieldOne,state.otpFieldTwo,state.otpFieldThree,state.otpFieldFour)
+            Row(
+                modifier = Modifier
+                    .height(50.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                otpStates.forEachIndexed { otpIndex, textFieldState ->
+                    OtpTextField(
+                        otpText = otpValue,
+                        state = textFieldState,
+                        index = otpIndex,
+                        onOtpTextChange = { value, _ ->
+                            otpValue = value
+                            Log.d("----otpchanges","otp value is changing: $otpValue")
+                        }
+                    )
                 }
-            )
+            }
+
 
             Spacer(modifier = Modifier.height(38.dp))
             ArijengActionButton(
@@ -140,6 +156,8 @@ private fun OTPScreen(
 @Composable
 fun OtpTextField(
     modifier: Modifier = Modifier,
+    state: TextFieldState,
+    index: Int,
     otpText: String,
     otpCount: Int = 4,
     onOtpTextChange: (String, Boolean) -> Unit
@@ -150,7 +168,7 @@ fun OtpTextField(
         }
     }
 
-    BasicTextField(
+   /* BasicTextField(
         modifier = modifier
             .height(50.dp)
             .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
@@ -176,6 +194,36 @@ fun OtpTextField(
                     Spacer(modifier = Modifier.width(8.dp))
                 }
             }
+        }
+    )*/
+
+    BasicTextField2(
+        state = state,
+        modifier = modifier
+            .height(50.dp)
+            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        decorator = {
+            Row(
+                modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+               repeat(otpCount) { index ->
+                    CharView(
+                        index = index,
+                        text = otpText
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+              /*  CharView(
+                    index = index,
+                    text = otpText
+                )
+                Spacer(modifier = Modifier.width(8.dp))*/
+            }
+
         }
     )
 }

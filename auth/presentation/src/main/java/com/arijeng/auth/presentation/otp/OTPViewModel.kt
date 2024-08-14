@@ -50,14 +50,7 @@ class OTPViewModel(
     val events = eventChannel.receiveAsFlow()
 
     init {
-      /*  state.otpFieldOne.textAsFlow()
-            .onEach { otpFieldOne ->
-                state = state.copy(
-                    canConfirmOTP = isOTPValid()
-                )
-            }
-            .launchIn(viewModelScope)*/
-        combine(
+       combine(
             state.otpFieldOne.textAsFlow(),
             state.otpFieldTwo.textAsFlow(),
             state.otpFieldThree.textAsFlow(),
@@ -66,7 +59,6 @@ class OTPViewModel(
             Log.d("---otpcode","$fieldOne $fieldTwo $fieldThree $fieldFour")
             state = state.copy(
                 canConfirmOTP = isOTPValid()
-                //fieldOne.isNotEmpty() && fieldTwo.isNotEmpty() && fieldThree.isNotEmpty() && fieldFour.isNotEmpty()
             )
         }.launchIn(viewModelScope)
     }
@@ -89,7 +81,7 @@ class OTPViewModel(
                 state.otpFieldOne.text.toString() + state.otpFieldTwo.text.toString() + state.otpFieldThree.text.toString() + state.otpFieldFour.text.toString()
             val result = authRepository.verifyOTP(
                 mobileNumber = sessionStorage.getUserInfo()?.phone ?: "",
-                otpCode = otpCode
+                otpCode = state.otpFieldOne.text.toString() + state.otpFieldTwo.text.toString() + state.otpFieldThree.text.toString() + state.otpFieldFour.text.toString()
             )
             state = state.copy(isOTPConfirming = false)
             when (result) {

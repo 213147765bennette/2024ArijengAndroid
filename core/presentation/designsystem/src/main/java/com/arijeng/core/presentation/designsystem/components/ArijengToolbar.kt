@@ -4,6 +4,7 @@
 
 package com.arijeng.core.presentation.designsystem.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -75,7 +76,7 @@ fun ArijengToolbar(
                 Text(
                     text = title,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontFamily = Poppins
                 )
             }
@@ -99,6 +100,8 @@ fun ArijengToolbar(
             if(menuItems.isNotEmpty()){
                 Box {
                     DropdownMenu(expanded =  isDropDownOpen,
+                        modifier = modifier
+                            .background(MaterialTheme.colorScheme.primaryContainer),
                         onDismissRequest = {
                             isDropDownOpen = false
                         }) {
@@ -124,7 +127,7 @@ fun ArijengToolbar(
                     }) {
                         Icon(imageVector = Icons.Default.MoreVert,
                             contentDescription = stringResource(id = R.string.open_menu),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = MaterialTheme.colorScheme.surface
                         )
                     }
                 }

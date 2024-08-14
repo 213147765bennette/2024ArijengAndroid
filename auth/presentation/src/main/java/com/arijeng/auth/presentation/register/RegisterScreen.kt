@@ -141,7 +141,7 @@ private fun RegisterScreen(
                     }
                 }
             )
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             ArijengTextField(
                 state = state.firstName,
                 startIcon = PersonIcon,
@@ -235,7 +235,7 @@ private fun RegisterScreen(
                 ),
                 isValid = state.passwordValidationState.hasUpperCaseCharacter
             )*/
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             ArijengActionButton(
                 text = stringResource(id = R.string.register),
                 isLoading = state.isRegistering,

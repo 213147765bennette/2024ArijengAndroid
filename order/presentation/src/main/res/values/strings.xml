@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="arijeng">Arijeng</string>
+    <string name="cart">Cart</string>
+    <string name="logout">Logout</string>
+    <string name="deliver_to">Deliver to</string>
+    <string name="what_are_you_having">Search your favourite meal</string>
+    <string name="meal_name">Meal Name</string>
+    <string name="category_image">Top category image</string>
+    <string name="error_couldnt_load_image">Couldn\'t load image.</string>
+    <string name="popular_meals">Popular Meals In your kasi</string>
+    <string name="favourite_meals">Favourite Meals</string>
+</resources>

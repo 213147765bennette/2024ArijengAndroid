@@ -84,10 +84,14 @@ class AuthRepositoryImpl(
     ): EmptyResult<DataError.Network> {
 
         return httpClient.post<VerifyOTPRequest, Unit>(
-            route = "auth/verify/{mobile}/{code}",
+            route = "auth/verify",
             body = VerifyOTPRequest(
                 mobileNumber = mobileNumber,
                 otpCode = otpCode
+            ),
+            queryParameters = mapOf(
+                "mobile" to mobileNumber,
+                "code" to otpCode
             )
         )
     }

@@ -20,10 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.arijeng.core.presentation.designsystem.ArijengBlack
-import com.arijeng.core.presentation.designsystem.ArijengGray
 import com.arijeng.core.presentation.designsystem.ArijengGray40
-import com.arijeng.core.presentation.designsystem.ArijengLightGray
 
 
 /**

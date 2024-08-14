@@ -75,6 +75,10 @@ val PersonIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.person)
 
+val SearchIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.search_icon)
+
 val ArijengIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.logoicon)
@@ -82,3 +86,7 @@ val ArijengIcon: ImageVector
 val CartIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.cart)
+
+val ActiveOrderIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.active_order)

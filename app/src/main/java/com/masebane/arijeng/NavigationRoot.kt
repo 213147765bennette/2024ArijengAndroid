@@ -5,11 +5,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.arijeng.auth.presentation.intro.IntroScreenRoot
 import com.arijeng.auth.presentation.login.LoginScreenRoot
 import com.arijeng.auth.presentation.otp.OTPScreenRoot
 import com.arijeng.auth.presentation.register.RegisterScreenRoot
+import com.arijeng.order.presentation.arijeng_overview.ArijengOverviewScreenRoot
 
 
 /**
@@ -39,7 +41,9 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController){
         composable(route = "intro"){
             IntroScreenRoot(
                 onSignUpClick = {
-                                navController.navigate("register")
+                                //navController.navigate("register")
+                    navController.navigate("home_overview")
+
                 },
                 onSignInClick = {
                     navController.navigate("login")
@@ -98,7 +102,15 @@ private fun NavGraphBuilder.homeGraph(navController: NavHostController){
         route = "home"
     ){
         composable("home_overview"){
-           //HomeOverviewScreenRoot()
+           ArijengOverviewScreenRoot(
+               onViewActiveOrder = {
+                    navController.navigate("active_order")
+               }
+           )
+        }
+
+        composable("active_order"){
+
         }
     }
 }
