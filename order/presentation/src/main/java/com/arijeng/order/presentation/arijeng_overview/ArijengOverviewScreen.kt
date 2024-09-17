@@ -1,9 +1,15 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.arijeng.order.presentation.arijeng_overview
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,15 +26,17 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.arijeng.core.presentation.designsystem.ActiveOrderIcon
+import androidx.navigation.NavController
 import com.arijeng.core.presentation.designsystem.ArijengIcon
 import com.arijeng.core.presentation.designsystem.ArijengTheme
 import com.arijeng.core.presentation.designsystem.CartIcon
 import com.arijeng.core.presentation.designsystem.LogoutIcon
+import com.arijeng.core.presentation.designsystem.ProfileIcon
 import com.arijeng.core.presentation.designsystem.SearchIcon
 import com.arijeng.core.presentation.designsystem.components.ArijengFloatingActionButton
 import com.arijeng.core.presentation.designsystem.components.ArijengScaffold
@@ -37,8 +45,13 @@ import com.arijeng.core.presentation.designsystem.components.ArijengToolbar
 import com.arijeng.core.presentation.designsystem.components.util.DropDownItem
 import com.arijeng.order.presentation.R
 import com.arijeng.order.presentation.arijeng_overview.components.MenuCategoryListItem
+import com.arijeng.order.presentation.arijeng_overview.model.ChipsMealsUi
 import com.arijeng.order.presentation.arijeng_overview.model.FavouriteMealsUi
+import com.arijeng.order.presentation.arijeng_overview.model.FireFighterMealsUi
+import com.arijeng.order.presentation.arijeng_overview.model.KotaMealsUi
+import com.arijeng.order.presentation.arijeng_overview.model.MealTherapyUi
 import com.arijeng.order.presentation.arijeng_overview.model.PopularMealsUi
+import com.arijeng.order.presentation.arijeng_overview.model.SoftDrinksUi
 import com.arijeng.order.presentation.arijeng_overview.model.TopCategoryUi
 import org.koin.androidx.compose.koinViewModel
 
@@ -51,6 +64,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ArijengOverviewScreenRoot(
     onViewActiveOrder: () -> Unit,
+    onCardItemClick: () -> Unit,
     viewModel: ArijengOverviewViewModel = koinViewModel()
 ) {
     ArijengOverviewScreen(
@@ -58,6 +72,7 @@ fun ArijengOverviewScreenRoot(
         onAction = { action ->
             when (action) {
                 ArijengOverviewAction.OnViewActiveOrderClick -> onViewActiveOrder()
+                ArijengOverviewAction.OnCardItemClick -> onCardItemClick()
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -65,6 +80,7 @@ fun ArijengOverviewScreenRoot(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArijengOverviewScreen(
     state: ArijengOverviewState,
@@ -82,8 +98,8 @@ fun ArijengOverviewScreen(
                 title = stringResource(id = R.string.arijeng),
                 menuItems = listOf(
                     DropDownItem(
-                        icon = CartIcon,
-                        title = stringResource(id = R.string.cart)
+                        icon = ProfileIcon,
+                        title = stringResource(id = R.string.profile)
                     ),
                     DropDownItem(
                         icon = LogoutIcon,
@@ -92,7 +108,7 @@ fun ArijengOverviewScreen(
                 ),
                 onMenuItemClick = { index ->
                     when (index) {
-                        0 -> onAction(ArijengOverviewAction.OnCartClick)
+                        0 -> onAction(ArijengOverviewAction.OnProfileClick)
                         1 -> onAction(ArijengOverviewAction.OnLogoutClick)
                     }
                 },
@@ -109,13 +125,15 @@ fun ArijengOverviewScreen(
         },
         floatingActionButton = {
             ArijengFloatingActionButton(
-                icon = ActiveOrderIcon,
+                icon = CartIcon,
                 onClick = {
                     onAction(ArijengOverviewAction.OnViewActiveOrderClick)
-                })
+                },
+                isLoading = false,
+                totalPrice = "R345.00"
+            )
         }
     ) { padding ->
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -143,12 +161,7 @@ fun ArijengOverviewScreen(
 
                 MenuCategoryListItem(
                     shopByTopCategories(),
-                    popularMealsUi = PopularMealsUi(
-                        id = "123",
-                        itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/kota%2Fbig_two.png?alt=media&token=e69bf715-fd72-4fa3-b08a-494d3465dcfc",
-                        itemName = "Burger",
-                        ratings = "*****"
-                    ),
+                    shopByPopularMeals(),
                     favouriteMealsUi = FavouriteMealsUi(
                         id = "123",
                         itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/kota%2Fbig_two.png?alt=media&token=e69bf715-fd72-4fa3-b08a-494d3465dcfc",
@@ -157,8 +170,42 @@ fun ArijengOverviewScreen(
                         itemDescription = "A heavy meal that treats you nice.",
                         itemSpecialPercentage = "15% OFF"
                     ),
+                    kotaMealsUi =  KotaMealsUi(
+                        id = "6",
+                        itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/kota%2Fkt_ten.png?alt=media&token=9cbfbae7-21ca-41fd-9ea4-c9438c13f896",
+                        itemName = "Soft Drinks",
+                        itemPrice = "R50.00"
+                    ),
+                    chipsMealsUi =  ChipsMealsUi(
+                        id = "6",
+                        itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/chips%2Fcp_two.png?alt=media&token=ba137f55-ebc8-4de6-bfe0-a8423015950e",
+                        itemName = "Crispy fries",
+                        itemPrice = "R35.00"
+                    ),
+                    mealTherapyUi =  MealTherapyUi(
+                        id = "6",
+                        itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/sandwich%2Fsand_four.png?alt=media&token=4dabc9b4-52fa-48b7-9a8b-2bcc2fe81701",
+                        itemName = "Therapy meal",
+                        itemPrice = "R35.00"
+                    ),
+                    fireFighterMealsUi =  FireFighterMealsUi(
+                        id = "6",
+                        itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/icecream%2Ficecream_four.jpg?alt=media&token=ced3cafb-7832-47f8-8614-d153d1d3840a",
+                        itemName = "Crispy fries",
+                        itemPrice = "R35.00"
+                    ),
+                    softDrinksUi =  SoftDrinksUi(
+                        id = "6",
+                        itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/drinks%2Fsoda.png?alt=media&token=cca0d529-1d1e-42bb-87ba-739d57894e66",
+                        itemName = "Crispy fries",
+                        itemPrice = "R35.00"
+                    ),
                     onItemClick = {
 
+                    },
+                    onAction ={
+                        onAction(ArijengOverviewAction.OnCardItemClick)
+                        Log.d("OVER_VIEW_SCREEN","clicked inside overview screen")
                     }
                 )
 
@@ -173,8 +220,8 @@ private fun shopByTopCategories() : List<TopCategoryUi>{
     return listOf(
         TopCategoryUi(
             id = "1",
-            itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/topCategory%2Ftop_burger.png?alt=media&token=0fdd041d-c131-4e2d-9ba5-92a629f053f2",
-            itemName = "Burger"
+            itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/topCategory%2Fbunny_chow.png?alt=media&token=4a16eb3c-3c79-43dc-aee2-52efa9da3b0d",
+            itemName = "Kota"
         ),
         TopCategoryUi(
             id = "2",
@@ -200,6 +247,42 @@ private fun shopByTopCategories() : List<TopCategoryUi>{
             id = "6",
             itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/topCategory%2Ftop_drinks.png?alt=media&token=7fe7641d-f270-4092-9a0a-dd2f6fc19d81",
             itemName = "Soft Drinks"
+        )
+    )
+}
+
+@Composable
+private fun shopByPopularMeals(): List<PopularMealsUi>{
+    return listOf(
+        PopularMealsUi(
+            id = "1",
+            itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/kota%2Fkota_two.png?alt=media&token=9290ffd1-6117-427e-b41b-e86523cfab9b",
+            itemName = "Bronze Kota",
+            ratings = "5"
+        ),
+        PopularMealsUi(
+            id = "1",
+            itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/kota%2Fkt_nine.png?alt=media&token=c8a8627a-ea19-43e8-b2e7-836f21af6206",
+            itemName = "Alluminium Kota",
+            ratings = "5"
+        ),
+        PopularMealsUi(
+            id = "1",
+            itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/sandwich%2Fsand_eight.png?alt=media&token=431017fa-d974-4f92-b91a-5ec38b1436c2",
+            itemName = "Roasted Chicken Sandwich",
+            ratings = "5"
+        ),
+        PopularMealsUi(
+            id = "1",
+            itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/kota%2Fquarantine%2029.png?alt=media&token=68237125-3ce9-4025-b206-5c429e57aa8b",
+            itemName = "Black Diamond Kota",
+            ratings = "5"
+        ),
+        PopularMealsUi(
+            id = "1",
+            itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/salads%2Fsalad_nine.png?alt=media&token=b54f004c-513f-459f-9637-f24bad4bfb22",
+            itemName = "Fried Russian",
+            ratings = "5"
         )
     )
 }

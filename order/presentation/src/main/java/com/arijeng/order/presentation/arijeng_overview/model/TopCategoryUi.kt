@@ -6,6 +6,7 @@ package com.arijeng.order.presentation.arijeng_overview.model
  * Company {Multichoice}
  * Email address {bennette.molepo@multichoice.com}
  */
+
 data class TopCategoryUi(
     val id: String,
     val itemPictureUrl: String?,

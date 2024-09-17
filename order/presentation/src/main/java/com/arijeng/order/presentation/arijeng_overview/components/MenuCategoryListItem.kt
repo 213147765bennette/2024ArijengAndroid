@@ -1,5 +1,6 @@
-@file:OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class,
-    ExperimentalFoundationApi::class
+@file:OptIn(
+    ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class
 )
 
 package com.arijeng.order.presentation.arijeng_overview.components
@@ -7,20 +8,20 @@ package com.arijeng.order.presentation.arijeng_overview.components
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -32,16 +33,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.arijeng.core.domain.arijeng_overview.dto.ItemDTO
+import com.arijeng.core.presentation.designsystem.AddIcon
 import com.arijeng.core.presentation.designsystem.ArijengTheme
+import com.arijeng.core.presentation.designsystem.RemoveIcon
+import com.arijeng.core.presentation.designsystem.components.WhiteFilledRoundIconButton
 import com.arijeng.order.presentation.R
+import com.arijeng.order.presentation.arijeng_overview.ArijengOverviewAction
+import com.arijeng.order.presentation.arijeng_overview.ArijengOverviewViewModel
+import com.arijeng.order.presentation.arijeng_overview.model.ChipsMealsUi
 import com.arijeng.order.presentation.arijeng_overview.model.FavouriteMealsUi
+import com.arijeng.order.presentation.arijeng_overview.model.FireFighterMealsUi
+import com.arijeng.order.presentation.arijeng_overview.model.KotaMealsUi
+import com.arijeng.order.presentation.arijeng_overview.model.MealTherapyUi
 import com.arijeng.order.presentation.arijeng_overview.model.PopularMealsUi
+import com.arijeng.order.presentation.arijeng_overview.model.SoftDrinksUi
 import com.arijeng.order.presentation.arijeng_overview.model.TopCategoryUi
+import com.arijeng.order.presentation.arijeng_overview.ui.ItemSection
+import com.arijeng.order.presentation.arijeng_overview.ui.defaultSectionList
+import com.arijeng.order.presentation.viewmodel.SharedViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 /**
@@ -52,59 +70,87 @@ import com.arijeng.order.presentation.arijeng_overview.model.TopCategoryUi
 @Composable
 fun MenuCategoryListItem(
     topCategoryUi: List<TopCategoryUi>,
-    popularMealsUi: PopularMealsUi,
+    popularMealsUi: List<PopularMealsUi>,
     favouriteMealsUi: FavouriteMealsUi,
+    kotaMealsUi: KotaMealsUi,
+    chipsMealsUi: ChipsMealsUi,
+    mealTherapyUi: MealTherapyUi,
+    fireFighterMealsUi: FireFighterMealsUi,
+    softDrinksUi: SoftDrinksUi,
     onItemClick: () -> Unit,
+    onAction: (ArijengOverviewAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box {
-        Column(
-            modifier = modifier
+        LazyColumn(
+            modifier = Modifier
+                .height(1000.dp)
                 .clickable(
                     onClick = {
-                        onItemClick()
+
                     }
                 )
                 .padding(top = 16.dp, bottom = 16.dp, start = 6.dp, end = 6.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            TopCategoryRow(topCategoryUi)
-            MenuCategoryFilterChip(menuCategory = "Kota",modifier)
-            PopularMealsCategoryRow(popularMealsUi, modifier)
-            FavouriteMealsCategoryRow(favouriteMealsUi, modifier)
+            item {
+                TopCategoryRow(topCategoryUi,modifier,onAction)
+                MenuCategoryFilterChip(menuCategory = "Kota",modifier)
+                PopularMealsCategoryRow(popularMealsUi, modifier)
+                FavouriteMealsCategoryRow(favouriteMealsUi, modifier)
+            }
+
+            items(defaultSectionList){section ->
+                KotaMealsCategoryRow(itemSection = section,modifier = modifier,onAction)
+            }
         }
     }
 }
 
 @Composable
-private fun TopCategoryRow(topCategoryUi: List<TopCategoryUi>, modifier: Modifier = Modifier) {
+private fun TopCategoryRow(
+    topCategoryUi: List<TopCategoryUi>,
+    modifier: Modifier = Modifier,
+    onAction: (ArijengOverviewAction) -> Unit,
+) {
+    val sharedViewModel: SharedViewModel = koinViewModel()
+    Row(
+        modifier = modifier
+            .padding(6.dp, top = 6.dp,bottom = 8.dp),
+        horizontalArrangement = Arrangement.Start
+    ){
+        Text(
+            text =  stringResource(id = R.string.popular_categories),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
     LazyRow(
         modifier = modifier
     ) {
         itemsIndexed(topCategoryUi){ index, topMenuCategory->
-            TopCategoryItemImage(
-                imageUrl = topMenuCategory.itemPictureUrl,
-                itemName = topMenuCategory.itemName,
-                itemIndex = index,
-                modifier = modifier.animateItemPlacement()
-            )
+            TopCategoryItemImage(topMenuCategory=topMenuCategory,index,onAction)
         }
     }
 }
 
 @Composable
 private fun TopCategoryItemImage(
-    imageUrl: String?,
-    itemName: String,
+    topMenuCategory: TopCategoryUi,
     itemIndex: Int,
-    modifier: Modifier = Modifier
+    onAction: (ArijengOverviewAction) -> Unit,
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .width(90.dp)
             .height(100.dp)
-            .padding(end = 12.dp)
+            .padding(end = 12.dp, bottom = 12.dp)
             .clip(RoundedCornerShape(12.dp))
+            .border(
+                0.5.dp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                shape = RoundedCornerShape(12.dp)
+            )
             .background(MaterialTheme.colorScheme.secondary)
             .clickable(onClick = {
                 Log.d("TOPCATEGORY_CLICK", "Top Category is clicked at $itemIndex")
@@ -113,13 +159,14 @@ private fun TopCategoryItemImage(
         horizontalAlignment = Alignment.Start
     ) {
         SubcomposeAsyncImage(
-            model = imageUrl,
+            model = topMenuCategory.itemPictureUrl,
             contentDescription = stringResource(id = R.string.category_image),
             alignment = Alignment.TopCenter,
-            modifier = modifier
+            modifier = Modifier
                 .height(50.dp)
                 .fillMaxWidth()
-                .aspectRatio(16 / 9f)
+                //.aspectRatio(16 / 9f)
+                .padding(top = 5.dp)
                 .clip(RoundedCornerShape(15.dp)),
             loading = {
                 Box(
@@ -150,11 +197,11 @@ private fun TopCategoryItemImage(
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
-            modifier = modifier
+            modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(start = 6.dp)
             ,
-            text = itemName,
+            text = topMenuCategory.itemName,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onPrimary
         )
@@ -172,6 +219,7 @@ private fun MenuCategoryFilterChip(
     Spacer(modifier = Modifier.width(3.dp))
     LazyRow(
         modifier = modifier
+            .padding(top = 16.dp, bottom = 16.dp)
             .clip(RoundedCornerShape(15.dp))
     ) {
         itemsIndexed(filterMenuItems){ index, menuCategory->
@@ -198,36 +246,10 @@ private fun MenuCategoryFilterChip(
 }
 
 @Composable
-private fun PopularMealsCategoryRow(popularMealsUi: PopularMealsUi, modifier: Modifier = Modifier) {
-    val popularMealList = listOf(
-        PopularMealsUi(
-            id = popularMealsUi.id,
-            itemPictureUrl = popularMealsUi.itemPictureUrl,
-            itemName = popularMealsUi.itemName,
-            ratings = popularMealsUi.ratings
-        ),
-        PopularMealsUi(
-            id = popularMealsUi.id,
-            itemPictureUrl = popularMealsUi.itemPictureUrl,
-            itemName = popularMealsUi.itemName,
-            ratings = popularMealsUi.ratings
-        ),
-        PopularMealsUi(
-            id = popularMealsUi.id,
-            itemPictureUrl = popularMealsUi.itemPictureUrl,
-            itemName = popularMealsUi.itemName,
-            ratings = popularMealsUi.ratings
-        ),
-        PopularMealsUi(
-            id = popularMealsUi.id,
-            itemPictureUrl = popularMealsUi.itemPictureUrl,
-            itemName = popularMealsUi.itemName,
-            ratings = popularMealsUi.ratings
-        )
-    )
+private fun PopularMealsCategoryRow(popularMealsUi: List<PopularMealsUi>, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
-            .padding(6.dp, top = 15.dp),
+            .padding(6.dp, top = 15.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.Start
     ){
         Text(
@@ -240,11 +262,12 @@ private fun PopularMealsCategoryRow(popularMealsUi: PopularMealsUi, modifier: Mo
     LazyRow(
         modifier = modifier
     ) {
-        items(popularMealList) { item ->
+        itemsIndexed(popularMealsUi) { index, item ->
             PopularMeals(
                 item.itemPictureUrl,
                 item.itemName,
                 item.ratings,
+                itemIndex = index,
                 modifier = modifier.animateItemPlacement()
             )
         }
@@ -255,12 +278,13 @@ private fun PopularMeals(
     imageUrl: String?,
     itemName: String,
     ratings: String,
+    itemIndex: Int,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .width(150.dp)
-            .height(175.dp)
+            .height(165.dp)
             .padding(end = 12.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(MaterialTheme.colorScheme.secondary),
@@ -273,7 +297,7 @@ private fun PopularMeals(
             modifier = modifier
                 .fillMaxWidth()
                 .height(100.dp)
-                .padding(end = 12.dp),
+                .padding(end = 8.dp, top = 5.dp),
             loading = {
                 Box(
                     modifier = Modifier
@@ -306,23 +330,26 @@ private fun PopularMeals(
                 .padding(start = 10.dp, top = 15.dp)
                 .align(Alignment.Start),
             text = itemName,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 2,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimary
         )
-        Text(
+       /* Text(
             text = ratings,
             modifier = modifier
                 .padding(start = 10.dp, top = 8.dp)
                 .align(Alignment.Start),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.surfaceTint
-        )
+        )*/
+
     }
 }
 
 @Composable
 private fun FavouriteMealsCategoryRow(favouriteMealsUi: FavouriteMealsUi, modifier: Modifier = Modifier) {
-    val favouriteMealList = listOf(
+    val favouriteMealListTest = listOf(
         FavouriteMealsUi(
             id = favouriteMealsUi.id,
             itemPictureUrl = favouriteMealsUi.itemPictureUrl,
@@ -356,9 +383,11 @@ private fun FavouriteMealsCategoryRow(favouriteMealsUi: FavouriteMealsUi, modifi
             itemSpecialPercentage = favouriteMealsUi.itemSpecialPercentage
         )
     )
+    val viewModel:ArijengOverviewViewModel = koinViewModel()
+    val favouriteMealList = viewModel.getListBySection(1).reversed().dropLast(3)
     Row(
         modifier = modifier
-            .padding(6.dp, top = 15.dp),
+            .padding(6.dp, top = 15.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.Start
     ){
         Text(
@@ -371,13 +400,14 @@ private fun FavouriteMealsCategoryRow(favouriteMealsUi: FavouriteMealsUi, modifi
     LazyRow(
         modifier = modifier
     ) {
-        items(favouriteMealList) { item ->
+        itemsIndexed(favouriteMealList) { index,item ->
             FavouriteMeals(
-                item.itemPictureUrl,
+                item.imageUrl,
                 item.itemName,
                 item.itemDescription,
                 item.itemPrice,
-                item.itemSpecialPercentage,
+                "15% OFF",
+                itemIndex = index,
                 modifier = modifier.animateItemPlacement()
             )
         }
@@ -389,8 +419,9 @@ private fun FavouriteMeals(
     imageUrl: String?,
     itemName: String,
     itemDescription: String,
-    itemPrice: String,
+    itemPrice: Double,
     itemSpecialPercentage: String,
+    itemIndex: Int,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -414,7 +445,7 @@ private fun FavouriteMeals(
                 modifier = modifier
                     .width(115.dp)
                     .height(100.dp)
-                    .padding(end = 2.dp),
+                    .padding(end = 2.dp, top = 5.dp),
                 loading = {
                     Box(
                         modifier = Modifier
@@ -447,67 +478,476 @@ private fun FavouriteMeals(
                     .padding(start = 6.dp),
                 horizontalAlignment = Alignment.Start
             ){
+                Row(
+                    modifier = modifier
+                        .padding(start = 50.dp)
+                        .width(100.dp)
+                        .clip(shape = RoundedCornerShape(bottomStart = 35.dp, bottomEnd = 1.dp))
+                        .background(color = MaterialTheme.colorScheme.primary),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        modifier = modifier
+                            .padding(start = 12.dp),
+                        text = itemSpecialPercentage,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
                 Text(
                     modifier = modifier
-                        .padding(top = 6.dp),
+                        .padding(top = 4.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     text = itemName,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Text(
                     text = itemDescription,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = modifier
-                        .padding(top = 8.dp),
+                        .padding(top = 3.dp),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.surface
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = itemPrice,
+                    text = "R${itemPrice}0",
                     modifier = modifier
-                        .padding(top = 8.dp),
-                    style = MaterialTheme.typography.bodyLarge,
+                        .padding(top = 4.dp),
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
         }
-
-
     }
 }
 
 @Composable
-private fun KotaMeals() {
+private fun KotaMealsCategoryRow(
+    itemSection: ItemSection,
+    modifier: Modifier,
+    onAction: (ArijengOverviewAction) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .padding(6.dp, top = 10.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.Start
+    ){
+        Text(
+            text =  stringResource(id = itemSection.name),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+    val sharedViewModel:SharedViewModel = koinViewModel()
+    val viewModel:ArijengOverviewViewModel = koinViewModel()
+    val lazyItems = viewModel.getListBySection(itemSection.type)
+
+    Column(
+        modifier = Modifier
+            .background(Color.Transparent)
+    ){
+        LazyRow(
+            modifier = modifier
+                .clickable(onClick = {
+                    onAction(ArijengOverviewAction.OnCardItemClick)
+                    Log.d("OVER_VIEW_SCREEN", "clicked inside overview screen 1111")
+                })
+        ) {
+            itemsIndexed(lazyItems) {index, item ->
+                MealDetailsCardRow(index,onAction,productItem = item){
+                    sharedViewModel.setArijengItem(it)
+                    Log.d("OVER_VIEW_SCREEN", "set arijeng item here...")
+                }
+            }
+        }
+    }
+
+}
+/*
+@Composable
+private fun ChipsCategoryRow(chipsMealsUi: ChipsMealsUi, modifier: Modifier = Modifier) {
+    val chipsMealList = listOf(
+        ChipsMealsUi(
+            id = chipsMealsUi.id,
+            itemPictureUrl = chipsMealsUi.itemPictureUrl,
+            itemName = chipsMealsUi.itemName,
+            itemPrice = chipsMealsUi.itemPrice
+        ),
+        ChipsMealsUi(
+            id = chipsMealsUi.id,
+            itemPictureUrl = chipsMealsUi.itemPictureUrl,
+            itemName = chipsMealsUi.itemName,
+            itemPrice = chipsMealsUi.itemPrice
+        ),
+        ChipsMealsUi(
+            id = chipsMealsUi.id,
+            itemPictureUrl = chipsMealsUi.itemPictureUrl,
+            itemName = chipsMealsUi.itemName,
+            itemPrice = chipsMealsUi.itemPrice
+
+
+        ),
+        ChipsMealsUi(
+            id = chipsMealsUi.id,
+            itemPictureUrl = chipsMealsUi.itemPictureUrl,
+            itemName = chipsMealsUi.itemName,
+            itemPrice = chipsMealsUi.itemPrice
+        )
+    )
+    Row(
+        modifier = modifier
+            .padding(6.dp, top = 15.dp),
+        horizontalArrangement = Arrangement.Start
+    ){
+        Text(
+            text =  stringResource(id = R.string.crispy_fries),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+
+    LazyRow(
+        modifier = modifier
+    ) {
+        items(chipsMealList) { item ->
+            KotaMeals(
+                item.itemPictureUrl,
+                item.itemName,
+                item.itemPrice,
+                modifier = modifier.animateItemPlacement()
+            )
+        }
+    }
+}
+
+@Composable
+private fun MealTherapyCategoryRow(mealTherapyUi: MealTherapyUi, modifier: Modifier = Modifier) {
+    val chipsMealList = listOf(
+        MealTherapyUi(
+            id = mealTherapyUi.id,
+            itemPictureUrl = mealTherapyUi.itemPictureUrl,
+            itemName = mealTherapyUi.itemName,
+            itemPrice = mealTherapyUi.itemPrice
+        ),
+        MealTherapyUi(
+            id = mealTherapyUi.id,
+            itemPictureUrl = mealTherapyUi.itemPictureUrl,
+            itemName = mealTherapyUi.itemName,
+            itemPrice = mealTherapyUi.itemPrice
+        ),
+        MealTherapyUi(
+            id = mealTherapyUi.id,
+            itemPictureUrl = mealTherapyUi.itemPictureUrl,
+            itemName = mealTherapyUi.itemName,
+            itemPrice = mealTherapyUi.itemPrice
+        ),
+        MealTherapyUi(
+            id = mealTherapyUi.id,
+            itemPictureUrl = mealTherapyUi.itemPictureUrl,
+            itemName = mealTherapyUi.itemName,
+            itemPrice = mealTherapyUi.itemPrice
+        )
+    )
+    Row(
+        modifier = modifier
+            .padding(6.dp, top = 15.dp),
+        horizontalArrangement = Arrangement.Start
+    ){
+        Text(
+            text =  stringResource(id = R.string.meal_therapy),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+
+    LazyRow(
+        modifier = modifier
+    ) {
+        items(chipsMealList) { item ->
+            KotaMeals(
+                item.itemPictureUrl,
+                item.itemName,
+                item.itemPrice,
+                modifier = modifier.animateItemPlacement()
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun FireFighterCategoryRow(fireFighterMealsUi: FireFighterMealsUi, modifier: Modifier = Modifier) {
+    val chipsMealList = listOf(
+        FireFighterMealsUi(
+            id = fireFighterMealsUi.id,
+            itemPictureUrl = fireFighterMealsUi.itemPictureUrl,
+            itemName = fireFighterMealsUi.itemName,
+            itemPrice = fireFighterMealsUi.itemPrice
+        ),
+        FireFighterMealsUi(
+            id = fireFighterMealsUi.id,
+            itemPictureUrl = fireFighterMealsUi.itemPictureUrl,
+            itemName = fireFighterMealsUi.itemName,
+            itemPrice = fireFighterMealsUi.itemPrice
+        ),
+        FireFighterMealsUi(
+            id = fireFighterMealsUi.id,
+            itemPictureUrl = fireFighterMealsUi.itemPictureUrl,
+            itemName = fireFighterMealsUi.itemName,
+            itemPrice = fireFighterMealsUi.itemPrice
+        ),
+        FireFighterMealsUi(
+            id = fireFighterMealsUi.id,
+            itemPictureUrl = fireFighterMealsUi.itemPictureUrl,
+            itemName = fireFighterMealsUi.itemName,
+            itemPrice = fireFighterMealsUi.itemPrice
+        )
+    )
+    Row(
+        modifier = modifier
+            .padding(6.dp, top = 15.dp),
+        horizontalArrangement = Arrangement.Start
+    ){
+        Text(
+            text =  stringResource(id = R.string.fire_fighter),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+
+    LazyRow(
+        modifier = modifier
+    ) {
+        items(chipsMealList) { item ->
+            KotaMeals(
+                item.itemPictureUrl,
+                item.itemName,
+                item.itemPrice,
+                modifier = modifier.animateItemPlacement()
+            )
+        }
+    }
+}
+
+@Composable
+private fun SoftDrinksCategoryRow(softDrinksUi: SoftDrinksUi, modifier: Modifier = Modifier) {
+    val chipsMealList = listOf(
+        SoftDrinksUi(
+            id = softDrinksUi.id,
+            itemPictureUrl = softDrinksUi.itemPictureUrl,
+            itemName = softDrinksUi.itemName,
+            itemPrice = softDrinksUi.itemPrice
+        ),
+        SoftDrinksUi(
+            id = softDrinksUi.id,
+            itemPictureUrl = softDrinksUi.itemPictureUrl,
+            itemName = softDrinksUi.itemName,
+            itemPrice = softDrinksUi.itemPrice
+        ),
+        SoftDrinksUi(
+            id = softDrinksUi.id,
+            itemPictureUrl = softDrinksUi.itemPictureUrl,
+            itemName = softDrinksUi.itemName,
+            itemPrice = softDrinksUi.itemPrice
+        ),
+        SoftDrinksUi(
+            id = softDrinksUi.id,
+            itemPictureUrl = softDrinksUi.itemPictureUrl,
+            itemName = softDrinksUi.itemName,
+            itemPrice = softDrinksUi.itemPrice
+        )
+    )
+    Row(
+        modifier = modifier
+            .padding(6.dp, top = 15.dp),
+        horizontalArrangement = Arrangement.Start
+    ){
+        Text(
+            text =  stringResource(id = R.string.soft_drinks),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+
+    LazyRow(
+        modifier = modifier
+    ) {
+        items(chipsMealList) { item ->
+            KotaMeals(
+                item.itemPictureUrl,
+                item.itemName,
+                item.itemPrice,
+                modifier = modifier.animateItemPlacement()
+            )
+        }
+    }
+}
+*/
+
+@Composable
+private fun MealDetailsCardRow(
+    itemIndex: Int,
+    onAction: (ArijengOverviewAction) -> Unit,
+    productItem: ItemDTO,
+    onItemClick: (ItemDTO) -> Unit = {},
+) {
+    Column(
+        modifier = Modifier
+            .width(140.dp)
+            .height(150.dp)
+            .padding(end = 12.dp)
+            .clip(RoundedCornerShape(15.dp))
+            .background(MaterialTheme.colorScheme.secondary),
+        horizontalAlignment = Alignment.Start
+    ) {
+        Row(
+            modifier = Modifier
+                .width(110.dp)
+                .padding(start = 12.dp)
+                .clip(RoundedCornerShape(15.dp))
+                .background(MaterialTheme.colorScheme.primary),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+                WhiteFilledRoundIconButton(
+                    imageVector = RemoveIcon,
+                    onClick = {
+                        Log.d("AD_OR_REMOCE_CLICK","We minus quantity now")
+                    }
+                )
+
+                Text(
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 5.dp),
+                    text = "1",
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.secondary,
+                    maxLines = 1
+                )
+
+                WhiteFilledRoundIconButton(
+                    imageVector = AddIcon,
+                    onClick = {
+                        Log.d("AD_OR_REMOCE_CLICK","We adding quantity now")
+                    }
+                )
+
+        }
+        SubcomposeAsyncImage(
+            model = productItem.imageUrl,
+            contentDescription = stringResource(id = R.string.category_image),
+            alignment = Alignment.TopCenter,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .padding(end = 2.dp, top = 1.dp),
+            loading = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.primaryContainer
+                    )
+                }
+            },
+            error = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.errorContainer),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.error_couldnt_load_image),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        )
+        Text(
+            modifier = Modifier
+                .padding(start = 10.dp, top = 5.dp)
+                .align(Alignment.Start),
+            text = productItem.itemName,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Text(
+            text = "R${productItem.itemPrice}0",
+            modifier = Modifier
+                .padding(start = 10.dp, top = 2.dp)
+                .align(Alignment.Start),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
+
+@Composable
+private fun ExpandAddOrRemoveItemsRow(){
+
+}
+@Composable
+private fun ChipsMeals(
+    imageUrl: String?,
+    itemName: String,
+    modifier: Modifier = Modifier
+) {
 
 }
 
 @Composable
-private fun ChipsMeals() {
+private fun TraditionalMeals(
+    imageUrl: String?,
+    itemName: String,
+    modifier: Modifier = Modifier
+) {
 
 }
 
 @Composable
-private fun TraditionalMeals() {
+private fun SandwichMeals(
+    imageUrl: String?,
+    itemName: String,
+    modifier: Modifier = Modifier
+) {
 
 }
 
 @Composable
-private fun SandwichMeals() {
+private fun GreenSaladsMeals(
+    imageUrl: String?,
+    itemName: String,
+    modifier: Modifier = Modifier
+) {
 
 }
 
 @Composable
-private fun GreenSaladsMeals() {
+private fun DesertWithIceCreams(
+    imageUrl: String?,
+    itemName: String,
+    modifier: Modifier = Modifier
+) {
 
 }
 
 @Composable
-private fun DesertWithIceCreams() {
-
-}
-
-@Composable
-private fun SoftDrinks() {
+private fun SoftDrinks(
+    imageUrl: String?,
+    itemName: String,
+    modifier: Modifier = Modifier
+) {
 
 }
 
@@ -548,12 +988,12 @@ private fun TopCategoryListItemPreview() {
                     itemName = "Soft Drinks"
                 )
             ),
-            popularMealsUi = PopularMealsUi(
+            popularMealsUi = listOf( PopularMealsUi(
                 id = "123",
                 itemPictureUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpmYrXnE51Hn7cTHaoJfbIZwZMF8chYRnB6A&s",
                 itemName = "Burger",
-                ratings = "*****"
-            ),
+                ratings = "*****",
+            )),
             favouriteMealsUi = FavouriteMealsUi(
                 id = "123",
                 itemPictureUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpmYrXnE51Hn7cTHaoJfbIZwZMF8chYRnB6A&s",
@@ -562,7 +1002,38 @@ private fun TopCategoryListItemPreview() {
                 itemDescription = "A heavy meal that treats you nice.",
                 itemSpecialPercentage = "15% OFF"
             ),
-            onItemClick = {}
+            kotaMealsUi =  KotaMealsUi(
+                id = "1",
+                itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/kota%2Fkt_ten.png?alt=media&token=9cbfbae7-21ca-41fd-9ea4-c9438c13f896",
+                itemName = "Burger",
+                itemPrice = "R35.00"
+            ),
+            chipsMealsUi =  ChipsMealsUi(
+                id = "1",
+                itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/kota%2Fkt_ten.png?alt=media&token=9cbfbae7-21ca-41fd-9ea4-c9438c13f896",
+                itemName = "Burger",
+                itemPrice = "R60.00"
+            ),
+            mealTherapyUi =  MealTherapyUi(
+                id = "6",
+                itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/sandwich%2Fsand_four.png?alt=media&token=4dabc9b4-52fa-48b7-9a8b-2bcc2fe81701",
+                itemName = "Therapy meal",
+                itemPrice = "R35.00"
+            ),
+            fireFighterMealsUi =  FireFighterMealsUi(
+                id = "6",
+                itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/chips%2Fcp_two.png?alt=media&token=ba137f55-ebc8-4de6-bfe0-a8423015950e",
+                itemName = "Crispy fries",
+                itemPrice = "R35.00"
+            ),
+            softDrinksUi =  SoftDrinksUi(
+                id = "6",
+                itemPictureUrl = "https://firebasestorage.googleapis.com/v0/b/arijeng.appspot.com/o/chips%2Fcp_two.png?alt=media&token=ba137f55-ebc8-4de6-bfe0-a8423015950e",
+                itemName = "Crispy fries",
+                itemPrice = "R35.00"
+            ),
+            onItemClick = {},
+            onAction = {}
         )
     }
 }

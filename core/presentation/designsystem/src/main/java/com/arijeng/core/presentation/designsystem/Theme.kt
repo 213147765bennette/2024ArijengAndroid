@@ -26,7 +26,8 @@ val DarkColorScheme = darkColorScheme(
     onSurface = ArijengWhite,
     onSurfaceVariant = ArijengGray,
     onSecondary = ArijengSecondaryWhite,
-    surfaceTint = ArijengYellow
+    surfaceTint = ArijengYellow,
+    onPrimaryContainer = ArijengSecondaryOrange,
 )
 
 @Composable

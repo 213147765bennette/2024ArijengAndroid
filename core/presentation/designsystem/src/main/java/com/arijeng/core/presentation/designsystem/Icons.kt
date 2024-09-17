@@ -87,6 +87,26 @@ val CartIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.cart)
 
+val DeleteIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.delete)
+
 val ActiveOrderIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.active_order)
+
+val ProfileIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.profile)
+
+val RemoveIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.remove)
+
+val AddIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.add)
+
+val BackArrowIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.back_arrow)

@@ -1,5 +1,5 @@
 @file:Suppress("OPT_IN_USAGE_FUTURE_ERROR")
-@file:OptIn(ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
 
 package com.arijeng.auth.presentation.login
 

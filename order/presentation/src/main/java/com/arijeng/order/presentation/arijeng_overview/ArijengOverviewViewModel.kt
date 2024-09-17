@@ -2,10 +2,26 @@
 
 package com.arijeng.order.presentation.arijeng_overview
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.arijeng.core.domain.arijeng_overview.MenuOverViewRepository
+import com.arijeng.core.domain.util.Result
+import com.arijeng.core.domain.arijeng_overview.dto.ChipsDTO
+import com.arijeng.core.domain.arijeng_overview.dto.IceCreamDTO
+import com.arijeng.core.domain.arijeng_overview.dto.ItemDTO
+import com.arijeng.core.domain.arijeng_overview.dto.KotaDTO
+import com.arijeng.core.domain.arijeng_overview.dto.MenuDTO
+import com.arijeng.core.domain.arijeng_overview.dto.SaladDTO
+import com.arijeng.core.domain.arijeng_overview.dto.SandwichDTO
+import com.arijeng.core.domain.arijeng_overview.dto.SoftDrinkDTO
+import com.arijeng.core.domain.arijeng_overview.dto.toItemDTO
+import com.arijeng.order.presentation.arijeng_overview.ui.SectionType
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 
 /**
@@ -14,21 +30,100 @@ import androidx.lifecycle.ViewModel
  * Email address {bennette.molepo@multichoice.com}
  */
 class ArijengOverviewViewModel(
-
+    menuOverViewRepository: MenuOverViewRepository
 ) : ViewModel() {
 
     var state by mutableStateOf(ArijengOverviewState())
         private set
+    private val menuDetails = mutableStateOf(
+        MenuDTO(emptyList(),
+        emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList(),
+        emptyList()
+    )
+    )
+    private val kotaDetails: MutableState<List<KotaDTO>> = mutableStateOf(emptyList())
+    private val chipsDetails: MutableState<List<ChipsDTO>> = mutableStateOf(emptyList())
+    private val iceCreamDetails: MutableState<List<IceCreamDTO>> = mutableStateOf(emptyList())
+    private val saladsDetails: MutableState<List<SaladDTO>> = mutableStateOf(emptyList())
+    private val sandwichDetails: MutableState<List<SandwichDTO>> = mutableStateOf(emptyList())
+    private val drinksDetails: MutableState<List<SoftDrinkDTO>> = mutableStateOf(emptyList())
+
+    init {
+        menuOverViewRepository.getHomeOverviewMenu().onEach {
+            if (it is Result.Success){
+                menuDetails.value = it.data
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun kotaList(): List<ItemDTO> {
+        menuDetails.value.let {
+            kotaDetails.value = it.kotaDTOS
+        }
+        return kotaDetails.value.map { it.toItemDTO() }
+    }
+
+    private fun chipsList(): List<ItemDTO> {
+        menuDetails.value.let {
+            chipsDetails.value = it.chipsDTOS
+        }
+        return chipsDetails.value.map { it.toItemDTO() }
+    }
+
+    private fun iceCreamList(): List<ItemDTO> {
+        menuDetails.value.let {
+            iceCreamDetails.value = it.iceCreamDTOS
+        }
+        return iceCreamDetails.value.map { it.toItemDTO() }
+    }
+
+    private fun saladsList(): List<ItemDTO> {
+        menuDetails.value.let {
+            saladsDetails.value = it.saladDTOS
+        }
+        return saladsDetails.value.map { it.toItemDTO() }
+    }
+
+    private fun sandwichList(): List<ItemDTO> {
+        menuDetails.value.let {
+            sandwichDetails.value = it.sandwichDTOS
+        }
+        return sandwichDetails.value.map { it.toItemDTO() }
+    }
+
+    private fun drinksList(): List<ItemDTO> {
+        menuDetails.value.let {
+            drinksDetails.value = it.softDrinkDTOS
+        }
+        return drinksDetails.value.map { it.toItemDTO() }
+    }
+
+    fun getListBySection(@SectionType type: Int): List<ItemDTO> {
+        return when (type) {
+            SectionType.KOTA -> kotaList()
+            SectionType.CHIPS -> chipsList()
+            SectionType.ICE_CREAM -> iceCreamList()
+            SectionType.SALADS -> saladsList()
+            SectionType.SANDWICH -> sandwichList()
+            SectionType.DRINKS -> drinksList()
+            else -> kotaList()
+        }
+    }
 
     fun onAction(action: ArijengOverviewAction) {
         when (action) {
-            ArijengOverviewAction.OnCartClick -> {
-
+            ArijengOverviewAction.OnProfileClick -> {
             }
+
             ArijengOverviewAction.OnLogoutClick -> {
 
             }
+
             ArijengOverviewAction.OnViewActiveOrderClick -> {
+
+            }
+
+            ArijengOverviewAction.OnCardItemClick -> {
 
             }
         }

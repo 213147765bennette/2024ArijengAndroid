@@ -2,12 +2,31 @@
 <resources>
     <string name="arijeng">Arijeng</string>
     <string name="cart">Cart</string>
+    <string name="profile">Profile</string>
     <string name="logout">Logout</string>
     <string name="deliver_to">Deliver to</string>
     <string name="what_are_you_having">Search your favourite meal</string>
     <string name="meal_name">Meal Name</string>
+    <string name="popular_categories">Popular Categories</string>
     <string name="category_image">Top category image</string>
+    <string name="more_item_details_image">More item description image</string>
+    <string name="cart_item_image">Cart item image</string>
     <string name="error_couldnt_load_image">Couldn\'t load image.</string>
-    <string name="popular_meals">Popular Meals In your kasi</string>
+    <string name="popular_meals">Most Popular Meals In your kasi</string>
     <string name="favourite_meals">Favourite Meals</string>
+    <string name="meaty_kota">Meaty Kota and toasted burgers</string>
+    <string name="meal_therapy">Meal Therapy</string>
+    <string name="fire_fighter">Fire Fighter</string>
+    <string name="combo_meals">African Traditional Combo Meals</string>
+    <string name="crispy_fries">Crispy Fries</string>
+    <string name="soft_drinks">Reboost your energy</string>
+
+    <!-- Items Sections heading here-->
+    <string name="label_kota">Meaty Kota</string>
+    <string name="label_chips">Crispy Fries</string>
+    <string name="label_ice_cream">Fire Fighter</string>
+    <string name="label_salads">Fresh Salads</string>
+    <string name="label_sandwich">Toasted Sandwich</string>
+    <string name="label_drinks">Reboost your energy</string>
+    <string name="label_view_all">View all</string>
 </resources>

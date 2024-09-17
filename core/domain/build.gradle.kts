@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.arijeng.jvm.library)
+    alias(libs.plugins.arijeng.jvm.ktor)
 }
 
 dependencies {

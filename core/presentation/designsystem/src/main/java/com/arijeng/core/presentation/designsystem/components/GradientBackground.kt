@@ -47,7 +47,7 @@ fun GradientBackground(
         smallDimension.roundToPx()
     }
 
-    val primaryColor = MaterialTheme.colorScheme.primary
+    val primaryColor = MaterialTheme.colorScheme.onPrimaryContainer
 
     val isAtLeastAndroid12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 

@@ -38,7 +38,6 @@ fun ArijengActionButton(
     onClick: () -> Unit
 ) {
 
-    //introduce the enums instead of booleans
     Button(
         onClick = onClick,
         enabled = enabled,

@@ -14,12 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -34,8 +37,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.arijeng.core.presentation.designsystem.AddIcon
 import com.arijeng.core.presentation.designsystem.ArrowLeftIcon
 import com.arijeng.core.presentation.designsystem.Poppins
 import com.arijeng.core.presentation.designsystem.R
@@ -43,6 +48,9 @@ import com.arijeng.core.presentation.designsystem.ArijengOrange
 import com.arijeng.core.presentation.designsystem.ArijengTheme
 import com.arijeng.core.presentation.designsystem.CartIcon
 import com.arijeng.core.presentation.designsystem.ArijengIcon
+import com.arijeng.core.presentation.designsystem.BackArrowIcon
+import com.arijeng.core.presentation.designsystem.DeleteIcon
+import com.arijeng.core.presentation.designsystem.ProfileIcon
 import com.arijeng.core.presentation.designsystem.components.util.DropDownItem
 
 
@@ -137,6 +145,60 @@ fun ArijengToolbar(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ArijengTopBarWithIcons(
+    onClick: () -> Unit,
+    cartOnClick: () -> Unit,
+    text: String,
+    enabled: Boolean,
+    isCartScreen: Boolean,
+    content: @Composable () -> Unit,
+) {
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = text,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = {
+                    onClick.invoke()
+                }) {
+                    Icon(
+                        imageVector = BackArrowIcon,
+                        contentDescription = "Back button"
+                    )
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent
+            ),
+            actions = {
+                IconButton(onClick = {
+                    cartOnClick.invoke()
+                },
+                    enabled = enabled
+                ) {
+                    Icon(
+                        imageVector =  if (isCartScreen) DeleteIcon else CartIcon,
+                        contentDescription = "Delete",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            },
+        )
+    },
+        content = {
+            it.apply { content.invoke() }
+        })
+}
+
 @Preview
 @Composable
 private fun ArijengToolbarPreview() {
@@ -155,8 +217,8 @@ private fun ArijengToolbarPreview() {
                     )
             },
             menuItems = listOf(DropDownItem(
-                icon = CartIcon,
-                title = "Cart"
+                icon = ProfileIcon,
+                title = "Profile"
             ))
         )
     }

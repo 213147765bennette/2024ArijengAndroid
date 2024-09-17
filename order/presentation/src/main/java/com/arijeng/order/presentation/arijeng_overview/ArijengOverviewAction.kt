@@ -10,5 +10,6 @@ sealed interface ArijengOverviewAction {
     data object OnViewActiveOrderClick: ArijengOverviewAction
     data object OnLogoutClick: ArijengOverviewAction
 
-    data object OnCartClick: ArijengOverviewAction
+    data object OnProfileClick: ArijengOverviewAction
+    data object OnCardItemClick: ArijengOverviewAction
 }

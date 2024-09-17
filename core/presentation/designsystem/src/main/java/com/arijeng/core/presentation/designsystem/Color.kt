@@ -9,6 +9,7 @@ package com.arijeng.core.presentation.designsystem
 import androidx.compose.ui.graphics.Color
 
 val ArijengOrange = Color(0xFFEB4A03)
+val ArijengSecondaryOrange = Color(0xFFF5976D)
 val ArijengOrange30 = Color(0xFFe65100)
 val ArijengGreen10 = Color(0x1A00F15E)
 val ArijengGreen5 = Color(0x0D00F15E)

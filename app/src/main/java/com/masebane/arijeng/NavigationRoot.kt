@@ -1,17 +1,20 @@
 package com.masebane.arijeng
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.arijeng.auth.presentation.intro.IntroScreenRoot
 import com.arijeng.auth.presentation.login.LoginScreenRoot
 import com.arijeng.auth.presentation.otp.OTPScreenRoot
 import com.arijeng.auth.presentation.register.RegisterScreenRoot
 import com.arijeng.order.presentation.arijeng_overview.ArijengOverviewScreenRoot
+import com.arijeng.order.presentation.arijeng_overview.shopping_cart.ShoppingCartScreenRoot
+import com.arijeng.order.presentation.more_item_details.MoreItemDetailsScreenRoot
+import com.arijeng.order.presentation.viewmodel.SharedViewModel
 
 
 /**
@@ -30,6 +33,7 @@ fun NavigationRoot(
     ) {
         authGraph(navController)
         homeGraph(navController)
+        moreCartDetailsNavGraph(navController)
     }
 }
 
@@ -41,7 +45,9 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController){
         composable(route = "intro"){
             IntroScreenRoot(
                 onSignUpClick = {
-                                //navController.navigate("register")
+                    //navController.navigate("register")
+
+                    //This one is for testing
                     navController.navigate("home_overview")
 
                 },
@@ -105,12 +111,53 @@ private fun NavGraphBuilder.homeGraph(navController: NavHostController){
            ArijengOverviewScreenRoot(
                onViewActiveOrder = {
                     navController.navigate("active_order")
+               },
+               onCardItemClick = {
+                   navController.navigate("more_home_details")
                }
            )
         }
 
-        composable("active_order"){
+        composable("more_home_details") {
+            MoreItemDetailsScreenRoot(
+                navController,
+                onViewActiveOrder = {
+                    navController.navigate("active_order")
+                }
+            )
+        }
 
+        /*  composable(route = MoreHomeItemScreen.AddressDetails.route) {
+              AddressBookScreen(navController)
+          }*/
+
+        composable("active_order"){
+            ShoppingCartScreenRoot(
+                navController = navController,
+                onCheckOutClick = {
+
+                }
+            )
         }
     }
+}
+
+fun NavGraphBuilder.moreCartDetailsNavGraph(navController: NavHostController) {
+    navigation(
+        route = "more_cart_graph",
+        startDestination = "home_overview"
+    ) {
+        composable(route = MoreCartScreen.CartDetails.route) {
+            //ShoppingCartScreen(navController)
+        }
+
+        composable(route = MoreCartScreen.CheckOut.route) {
+            ///CheckOutScreen(navController)
+        }
+    }
+}
+
+sealed class MoreCartScreen(val route: String) {
+    data object CartDetails : MoreCartScreen(route = "CART")
+    data object CheckOut : MoreCartScreen(route = "CHECKOUT")
 }

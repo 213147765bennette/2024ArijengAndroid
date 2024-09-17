@@ -1,5 +1,8 @@
+import org.gradle.api.JavaVersion.VERSION_17
+
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.arijeng.jvm.ktor)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
@@ -24,20 +27,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = VERSION_17
+        targetCompatibility = VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.bundles.koin)
+
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
 }
