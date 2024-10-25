@@ -171,7 +171,7 @@ fun OrderDetails(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 5.dp),
-            text = "itemData?.itemName.toString()",
+            text = itemData?.itemName.toString(),
            color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -212,7 +212,7 @@ fun ItemDescription(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(start = 12.dp, end = 12.dp, top = 8.dp),
-            text = "itemData?.itemDescription.toString()",
+            text = itemData?.itemDescription.toString(),
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodySmall
         )

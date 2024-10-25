@@ -6,10 +6,17 @@
 package com.arijeng.order.presentation.arijeng_overview.components
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +37,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -531,6 +543,10 @@ private fun KotaMealsCategoryRow(
     modifier: Modifier,
     onAction: (ArijengOverviewAction) -> Unit
 ) {
+    val sharedViewModel:SharedViewModel = koinViewModel()
+    val viewModel:ArijengOverviewViewModel = koinViewModel()
+    val lazyItems = viewModel.getListBySection(itemSection.type)
+
     Row(
         modifier = modifier
             .padding(6.dp, top = 10.dp, bottom = 8.dp),
@@ -542,9 +558,6 @@ private fun KotaMealsCategoryRow(
             color = MaterialTheme.colorScheme.onPrimary
         )
     }
-    val sharedViewModel:SharedViewModel = koinViewModel()
-    val viewModel:ArijengOverviewViewModel = koinViewModel()
-    val lazyItems = viewModel.getListBySection(itemSection.type)
 
     Column(
         modifier = Modifier
@@ -552,14 +565,15 @@ private fun KotaMealsCategoryRow(
     ){
         LazyRow(
             modifier = modifier
-                .clickable(onClick = {
+                /*.clickable(onClick = {
                     onAction(ArijengOverviewAction.OnCardItemClick)
                     Log.d("OVER_VIEW_SCREEN", "clicked inside overview screen 1111")
-                })
+                })*/
         ) {
             itemsIndexed(lazyItems) {index, item ->
                 MealDetailsCardRow(index,onAction,productItem = item){
                     sharedViewModel.setArijengItem(it)
+                    onAction(ArijengOverviewAction.OnCardItemClick)
                     Log.d("OVER_VIEW_SCREEN", "set arijeng item here...")
                 }
             }
@@ -567,226 +581,8 @@ private fun KotaMealsCategoryRow(
     }
 
 }
-/*
-@Composable
-private fun ChipsCategoryRow(chipsMealsUi: ChipsMealsUi, modifier: Modifier = Modifier) {
-    val chipsMealList = listOf(
-        ChipsMealsUi(
-            id = chipsMealsUi.id,
-            itemPictureUrl = chipsMealsUi.itemPictureUrl,
-            itemName = chipsMealsUi.itemName,
-            itemPrice = chipsMealsUi.itemPrice
-        ),
-        ChipsMealsUi(
-            id = chipsMealsUi.id,
-            itemPictureUrl = chipsMealsUi.itemPictureUrl,
-            itemName = chipsMealsUi.itemName,
-            itemPrice = chipsMealsUi.itemPrice
-        ),
-        ChipsMealsUi(
-            id = chipsMealsUi.id,
-            itemPictureUrl = chipsMealsUi.itemPictureUrl,
-            itemName = chipsMealsUi.itemName,
-            itemPrice = chipsMealsUi.itemPrice
 
 
-        ),
-        ChipsMealsUi(
-            id = chipsMealsUi.id,
-            itemPictureUrl = chipsMealsUi.itemPictureUrl,
-            itemName = chipsMealsUi.itemName,
-            itemPrice = chipsMealsUi.itemPrice
-        )
-    )
-    Row(
-        modifier = modifier
-            .padding(6.dp, top = 15.dp),
-        horizontalArrangement = Arrangement.Start
-    ){
-        Text(
-            text =  stringResource(id = R.string.crispy_fries),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-    }
-
-    LazyRow(
-        modifier = modifier
-    ) {
-        items(chipsMealList) { item ->
-            KotaMeals(
-                item.itemPictureUrl,
-                item.itemName,
-                item.itemPrice,
-                modifier = modifier.animateItemPlacement()
-            )
-        }
-    }
-}
-
-@Composable
-private fun MealTherapyCategoryRow(mealTherapyUi: MealTherapyUi, modifier: Modifier = Modifier) {
-    val chipsMealList = listOf(
-        MealTherapyUi(
-            id = mealTherapyUi.id,
-            itemPictureUrl = mealTherapyUi.itemPictureUrl,
-            itemName = mealTherapyUi.itemName,
-            itemPrice = mealTherapyUi.itemPrice
-        ),
-        MealTherapyUi(
-            id = mealTherapyUi.id,
-            itemPictureUrl = mealTherapyUi.itemPictureUrl,
-            itemName = mealTherapyUi.itemName,
-            itemPrice = mealTherapyUi.itemPrice
-        ),
-        MealTherapyUi(
-            id = mealTherapyUi.id,
-            itemPictureUrl = mealTherapyUi.itemPictureUrl,
-            itemName = mealTherapyUi.itemName,
-            itemPrice = mealTherapyUi.itemPrice
-        ),
-        MealTherapyUi(
-            id = mealTherapyUi.id,
-            itemPictureUrl = mealTherapyUi.itemPictureUrl,
-            itemName = mealTherapyUi.itemName,
-            itemPrice = mealTherapyUi.itemPrice
-        )
-    )
-    Row(
-        modifier = modifier
-            .padding(6.dp, top = 15.dp),
-        horizontalArrangement = Arrangement.Start
-    ){
-        Text(
-            text =  stringResource(id = R.string.meal_therapy),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-    }
-
-    LazyRow(
-        modifier = modifier
-    ) {
-        items(chipsMealList) { item ->
-            KotaMeals(
-                item.itemPictureUrl,
-                item.itemName,
-                item.itemPrice,
-                modifier = modifier.animateItemPlacement()
-            )
-        }
-    }
-}
-
-
-@Composable
-private fun FireFighterCategoryRow(fireFighterMealsUi: FireFighterMealsUi, modifier: Modifier = Modifier) {
-    val chipsMealList = listOf(
-        FireFighterMealsUi(
-            id = fireFighterMealsUi.id,
-            itemPictureUrl = fireFighterMealsUi.itemPictureUrl,
-            itemName = fireFighterMealsUi.itemName,
-            itemPrice = fireFighterMealsUi.itemPrice
-        ),
-        FireFighterMealsUi(
-            id = fireFighterMealsUi.id,
-            itemPictureUrl = fireFighterMealsUi.itemPictureUrl,
-            itemName = fireFighterMealsUi.itemName,
-            itemPrice = fireFighterMealsUi.itemPrice
-        ),
-        FireFighterMealsUi(
-            id = fireFighterMealsUi.id,
-            itemPictureUrl = fireFighterMealsUi.itemPictureUrl,
-            itemName = fireFighterMealsUi.itemName,
-            itemPrice = fireFighterMealsUi.itemPrice
-        ),
-        FireFighterMealsUi(
-            id = fireFighterMealsUi.id,
-            itemPictureUrl = fireFighterMealsUi.itemPictureUrl,
-            itemName = fireFighterMealsUi.itemName,
-            itemPrice = fireFighterMealsUi.itemPrice
-        )
-    )
-    Row(
-        modifier = modifier
-            .padding(6.dp, top = 15.dp),
-        horizontalArrangement = Arrangement.Start
-    ){
-        Text(
-            text =  stringResource(id = R.string.fire_fighter),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-    }
-
-    LazyRow(
-        modifier = modifier
-    ) {
-        items(chipsMealList) { item ->
-            KotaMeals(
-                item.itemPictureUrl,
-                item.itemName,
-                item.itemPrice,
-                modifier = modifier.animateItemPlacement()
-            )
-        }
-    }
-}
-
-@Composable
-private fun SoftDrinksCategoryRow(softDrinksUi: SoftDrinksUi, modifier: Modifier = Modifier) {
-    val chipsMealList = listOf(
-        SoftDrinksUi(
-            id = softDrinksUi.id,
-            itemPictureUrl = softDrinksUi.itemPictureUrl,
-            itemName = softDrinksUi.itemName,
-            itemPrice = softDrinksUi.itemPrice
-        ),
-        SoftDrinksUi(
-            id = softDrinksUi.id,
-            itemPictureUrl = softDrinksUi.itemPictureUrl,
-            itemName = softDrinksUi.itemName,
-            itemPrice = softDrinksUi.itemPrice
-        ),
-        SoftDrinksUi(
-            id = softDrinksUi.id,
-            itemPictureUrl = softDrinksUi.itemPictureUrl,
-            itemName = softDrinksUi.itemName,
-            itemPrice = softDrinksUi.itemPrice
-        ),
-        SoftDrinksUi(
-            id = softDrinksUi.id,
-            itemPictureUrl = softDrinksUi.itemPictureUrl,
-            itemName = softDrinksUi.itemName,
-            itemPrice = softDrinksUi.itemPrice
-        )
-    )
-    Row(
-        modifier = modifier
-            .padding(6.dp, top = 15.dp),
-        horizontalArrangement = Arrangement.Start
-    ){
-        Text(
-            text =  stringResource(id = R.string.soft_drinks),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-    }
-
-    LazyRow(
-        modifier = modifier
-    ) {
-        items(chipsMealList) { item ->
-            KotaMeals(
-                item.itemPictureUrl,
-                item.itemName,
-                item.itemPrice,
-                modifier = modifier.animateItemPlacement()
-            )
-        }
-    }
-}
-*/
 
 @Composable
 private fun MealDetailsCardRow(
@@ -795,13 +591,20 @@ private fun MealDetailsCardRow(
     productItem: ItemDTO,
     onItemClick: (ItemDTO) -> Unit = {},
 ) {
+    var quantityVisible by remember { mutableStateOf(false) }
+    var quantityValue by remember {
+        mutableIntStateOf(0)
+    }
     Column(
         modifier = Modifier
             .width(140.dp)
             .height(150.dp)
             .padding(end = 12.dp)
             .clip(RoundedCornerShape(15.dp))
-            .background(MaterialTheme.colorScheme.secondary),
+            .background(MaterialTheme.colorScheme.secondary)
+            .clickable(onClick = {
+                onAction(ArijengOverviewAction.OnCardItemClick)
+            }),
         horizontalAlignment = Alignment.Start
     ) {
         Row(
@@ -809,32 +612,52 @@ private fun MealDetailsCardRow(
                 .width(110.dp)
                 .padding(start = 12.dp)
                 .clip(RoundedCornerShape(15.dp))
-                .background(MaterialTheme.colorScheme.primary),
-            horizontalArrangement = Arrangement.Center,
+                ,
+            horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-                WhiteFilledRoundIconButton(
-                    imageVector = RemoveIcon,
-                    onClick = {
-                        Log.d("AD_OR_REMOCE_CLICK","We minus quantity now")
-                    }
-                )
+           Row(
+                modifier = Modifier
+                    .width(110.dp)
+                    .padding(start = 1.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(if (quantityVisible) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+               AnimatedVisibility(
+                   modifier = Modifier,
+                   visible = quantityVisible,
+                   enter = fadeIn(animationSpec = tween(2000)),
+                   exit = fadeOut(animationSpec = tween(2000))
+               ){
 
-                Text(
-                    modifier = Modifier
-                        .padding(start = 10.dp, top = 5.dp),
-                    text = "1",
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.secondary,
-                    maxLines = 1
-                )
+                   WhiteFilledRoundIconButton(
+                       imageVector = RemoveIcon,
+                       onClick = {
+                           quantityValue-=1
+                           Log.d("AD_OR_REMOCE_CLICK","We minus quantity now")
+                       }
+                   )
 
-                WhiteFilledRoundIconButton(
-                    imageVector = AddIcon,
-                    onClick = {
-                        Log.d("AD_OR_REMOCE_CLICK","We adding quantity now")
-                    }
-                )
+                   Text(
+                       modifier = Modifier
+                           .padding(start = 45.dp),
+                       text = quantityValue.toString(),
+                       textAlign = TextAlign.Center,
+                       color = MaterialTheme.colorScheme.secondary,
+                       maxLines = 1
+                   )
+               }
+               WhiteFilledRoundIconButton(
+                   imageVector = AddIcon,
+                   onClick = {
+                       quantityValue+=1
+                       quantityVisible = !quantityVisible
+                       Log.d("AD_OR_REMOCE_CLICK","We adding quantity now")
+                   }
+               )
+           }
 
         }
         SubcomposeAsyncImage(

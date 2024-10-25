@@ -12,6 +12,9 @@ import com.arijeng.auth.presentation.login.LoginScreenRoot
 import com.arijeng.auth.presentation.otp.OTPScreenRoot
 import com.arijeng.auth.presentation.register.RegisterScreenRoot
 import com.arijeng.order.presentation.arijeng_overview.ArijengOverviewScreenRoot
+import com.arijeng.order.presentation.arijeng_overview.profile.ArijengProfileScreenRoot
+import com.arijeng.order.presentation.arijeng_overview.profile.about.ArijengAboutScreenRoot
+import com.arijeng.order.presentation.arijeng_overview.profile.termsandconditions.ArijengTermsAndConditionsScreenRoot
 import com.arijeng.order.presentation.arijeng_overview.shopping_cart.ShoppingCartScreenRoot
 import com.arijeng.order.presentation.more_item_details.MoreItemDetailsScreenRoot
 import com.arijeng.order.presentation.viewmodel.SharedViewModel
@@ -138,6 +141,44 @@ private fun NavGraphBuilder.homeGraph(navController: NavHostController){
 
                 }
             )
+        }
+    }
+}
+
+private fun NavGraphBuilder.profileGraph(navController: NavHostController){
+    navigation(
+        startDestination = "profile_overview",
+        route = "profile"
+    ){
+        composable("profile_overview"){
+            ArijengProfileScreenRoot(
+                onAboutClick = {
+                    navController.navigate("about")
+                },
+                onTermsAndConditionsClick = {
+                    navController.navigate("terms_conditions")
+                },
+                onEditProfileClick = {
+                    navController.navigate("edit_profile")
+                },
+                onLogoutClick = {
+                    navController.navigate("logout")
+                })
+        }
+
+        composable("about") {
+            ArijengAboutScreenRoot()
+        }
+
+         composable("terms_conditions") {
+              ArijengTermsAndConditionsScreenRoot()
+          }
+
+        composable("edit_profile"){
+
+        }
+        composable("logout"){
+
         }
     }
 }

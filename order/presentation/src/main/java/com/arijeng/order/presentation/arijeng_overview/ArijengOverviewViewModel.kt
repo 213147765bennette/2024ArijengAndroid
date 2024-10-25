@@ -20,8 +20,12 @@ import com.arijeng.core.domain.arijeng_overview.dto.SandwichDTO
 import com.arijeng.core.domain.arijeng_overview.dto.SoftDrinkDTO
 import com.arijeng.core.domain.arijeng_overview.dto.toItemDTO
 import com.arijeng.order.presentation.arijeng_overview.ui.SectionType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 
 
 /**
@@ -35,12 +39,20 @@ class ArijengOverviewViewModel(
 
     var state by mutableStateOf(ArijengOverviewState())
         private set
-    private val menuDetails = mutableStateOf(
-        MenuDTO(emptyList(),
-        emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList(),
-        emptyList()
+    private val _menuDetails = MutableStateFlow(
+        MenuDTO(
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList()
+        )
     )
-    )
+
     private val kotaDetails: MutableState<List<KotaDTO>> = mutableStateOf(emptyList())
     private val chipsDetails: MutableState<List<ChipsDTO>> = mutableStateOf(emptyList())
     private val iceCreamDetails: MutableState<List<IceCreamDTO>> = mutableStateOf(emptyList())
@@ -48,51 +60,64 @@ class ArijengOverviewViewModel(
     private val sandwichDetails: MutableState<List<SandwichDTO>> = mutableStateOf(emptyList())
     private val drinksDetails: MutableState<List<SoftDrinkDTO>> = mutableStateOf(emptyList())
 
-    init {
+    val menuDetails = _menuDetails
+        .onStart {
+            menuOverViewRepository.getHomeOverviewMenu().onEach {
+                if (it is Result.Success) {
+                    _menuDetails.value = it.data
+                }
+            }.launchIn(viewModelScope)
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            false
+        )
+ /*   init {
         menuOverViewRepository.getHomeOverviewMenu().onEach {
-            if (it is Result.Success){
-                menuDetails.value = it.data
+            if (it is Result.Success) {
+                _menuDetails.value = it.data
             }
         }.launchIn(viewModelScope)
-    }
+    }*/
 
     private fun kotaList(): List<ItemDTO> {
-        menuDetails.value.let {
+        _menuDetails.value.let {
             kotaDetails.value = it.kotaDTOS
         }
         return kotaDetails.value.map { it.toItemDTO() }
     }
 
     private fun chipsList(): List<ItemDTO> {
-        menuDetails.value.let {
+        _menuDetails.value.let {
             chipsDetails.value = it.chipsDTOS
         }
         return chipsDetails.value.map { it.toItemDTO() }
     }
 
     private fun iceCreamList(): List<ItemDTO> {
-        menuDetails.value.let {
+        _menuDetails.value.let {
             iceCreamDetails.value = it.iceCreamDTOS
         }
         return iceCreamDetails.value.map { it.toItemDTO() }
     }
 
     private fun saladsList(): List<ItemDTO> {
-        menuDetails.value.let {
+        _menuDetails.value.let {
             saladsDetails.value = it.saladDTOS
         }
         return saladsDetails.value.map { it.toItemDTO() }
     }
 
     private fun sandwichList(): List<ItemDTO> {
-        menuDetails.value.let {
+        _menuDetails.value.let {
             sandwichDetails.value = it.sandwichDTOS
         }
         return sandwichDetails.value.map { it.toItemDTO() }
     }
 
     private fun drinksList(): List<ItemDTO> {
-        menuDetails.value.let {
+        _menuDetails.value.let {
             drinksDetails.value = it.softDrinkDTOS
         }
         return drinksDetails.value.map { it.toItemDTO() }

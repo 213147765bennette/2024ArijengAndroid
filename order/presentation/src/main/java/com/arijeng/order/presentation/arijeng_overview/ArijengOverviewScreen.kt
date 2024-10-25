@@ -1,7 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
     ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
     ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
 )
 
 package com.arijeng.order.presentation.arijeng_overview
@@ -204,7 +204,7 @@ fun ArijengOverviewScreen(
 
                     },
                     onAction ={
-                        onAction(ArijengOverviewAction.OnCardItemClick)
+                        //onAction(ArijengOverviewAction.OnCardItemClick)
                         Log.d("OVER_VIEW_SCREEN","clicked inside overview screen")
                     }
                 )

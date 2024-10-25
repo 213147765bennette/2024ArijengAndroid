@@ -36,14 +36,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.SubcomposeAsyncImage
+import com.arijeng.core.domain.arijeng_overview.dto.ItemDTO
 import com.arijeng.core.presentation.designsystem.ArijengIcon
 import com.arijeng.core.presentation.designsystem.ArijengTheme
 import com.arijeng.core.presentation.designsystem.CartIcon
@@ -57,6 +60,9 @@ import com.arijeng.core.presentation.designsystem.components.ArijengTopBarWithIc
 import com.arijeng.core.presentation.designsystem.components.util.DropDownItem
 import com.arijeng.order.presentation.R
 import com.arijeng.order.presentation.arijeng_overview.ArijengOverviewAction
+import com.arijeng.order.presentation.arijeng_overview.ArijengOverviewViewModel
+import com.arijeng.order.presentation.arijeng_overview.ui.ItemSection
+import com.arijeng.order.presentation.arijeng_overview.ui.SectionType
 import com.arijeng.order.presentation.more_item_details.AddMinusButtons
 import org.koin.androidx.compose.koinViewModel
 
@@ -154,10 +160,11 @@ fun BottomDetails(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Bottom
     ) {
+        //enabled = state.canCheckOut && !state.isCheckingOut
             ArijengActionButton(
                 text = "CHECK OUT",
                 isLoading = state.isCheckingOut,
-                enabled = state.canCheckOut && !state.isCheckingOut,
+                enabled = true,
                 onClick = {
                     onAction(ShoppingCartAction.OnGoToCheckoutClick)
                 }
@@ -169,22 +176,40 @@ fun BottomDetails(
 fun MiddleDetails(
 ) {
 
+    val itemSection = ItemSection(name = R.string.label_kota, type = SectionType.KOTA)
+    val viewModel: ArijengOverviewViewModel = koinViewModel()
+    val lazyItems = viewModel.getListBySection(itemSection.type)
     LazyColumn(
         modifier = Modifier
             .height(630.dp)
+            .clip(RoundedCornerShape(15.dp))
+            .background(MaterialTheme.colorScheme.secondary),
     ) {
-        items(
-            items = listOf(
-                "Kota 1",
-                "Kota 2",
-                "Kota 3",
-                "Kota 3",
-                "Kota 3",
-                "Kota 3",
-                "Kota 3"
-            )
-        ) {
-            ItemsRow(modifier = Modifier, items = it)
+        item {
+            Row(
+                modifier = Modifier
+                    .padding(start = 25.dp, end = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Text(
+                    text = "Total Summary",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(modifier = Modifier.width(100.dp))
+                Text(
+                    text = "R345.00",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+        items(lazyItems) {
+            ItemsRow(modifier = Modifier, itemData = it)
         }
     }
 
@@ -193,7 +218,7 @@ fun MiddleDetails(
 @Composable
 fun ItemsRow(
     modifier: Modifier,
-    items: String,
+    itemData: ItemDTO,
     onItemClick: (String) -> Unit = {}
 ) {
     Card(
@@ -201,7 +226,7 @@ fun ItemsRow(
             .padding(start = 12.dp, end = 12.dp, top = 15.dp, bottom = 2.dp)
             .fillMaxWidth()
             .clickable {
-                onItemClick.invoke(items)
+
             },
         shape = RoundedCornerShape(corner = CornerSize(12.dp)),
         colors = CardDefaults.cardColors(
@@ -215,23 +240,21 @@ fun ItemsRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-
             Surface(
                 modifier = modifier
                     .padding(12.dp)
-                    .height(70.dp)
-                    .width(50.dp),
-                shape = RectangleShape
+                    .height(50.dp)
+                    .width(50.dp)
             ) {
                 SubcomposeAsyncImage(
-                    model = "itemData.imageUrl",
+                    model = itemData.imageUrl,
                     contentDescription = stringResource(id = R.string.cart_item_image),
-                    alignment = Alignment.TopCenter,
+                    alignment = Alignment.Center,
                     modifier = modifier
                         .fillMaxWidth()
-                        .size(150.dp)
-                        .padding(end = 2.dp, top = 1.dp)
-                        .clip(RectangleShape),
+                        .size(100.dp)
+                        .background(MaterialTheme.colorScheme.secondary)
+                    ,
                     loading = {
                         Box(
                             modifier = Modifier
@@ -267,17 +290,16 @@ fun ItemsRow(
             ) {
                 Text(
                     modifier = Modifier.width(125.dp),
-                    text = "Items my test test test fdhjfgkh hdghfasdhgfdf syufsfgh done3",
+                    text = itemData.itemDescription,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleSmall
                 )
+                Spacer(modifier = Modifier.size(4.dp))
                 Text(
-                    text = "R25,00",
+                    text = "R${itemData.itemPrice}",
                     style = MaterialTheme.typography.titleSmall
                 )
-
-
             }
 
             Row(
@@ -287,6 +309,7 @@ fun ItemsRow(
             ) {
                 AddMinusButtons(modifier)
             }
+
         }
     }
 }

@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 fun WhiteFilledRoundIconButton(
     modifier: Modifier = Modifier,
     imageVector: ImageVector,
-    onClick: () -> Unit,
+    onClick:  () -> Unit,
     tint: Color =  MaterialTheme.colorScheme.primary
 ) {
    Card(modifier = modifier
@@ -48,7 +48,7 @@ fun WhiteFilledRoundIconButton(
     ) {
         Icon(
             modifier = modifier.size(20.dp)
-                .clickable { onClick.invoke() },
+                .clickable { onClick.invoke()},
             imageVector = imageVector,
             contentDescription = "Plus or minus icon",
             tint = tint
