@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.arijeng.android.library)
     alias(libs.plugins.arijeng.jvm.ktor)
-    //alias(libs.plugins.ktorfit)
 }
 
 android {

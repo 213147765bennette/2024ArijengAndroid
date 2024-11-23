@@ -60,7 +60,7 @@ class ArijengOverviewViewModel(
     private val sandwichDetails: MutableState<List<SandwichDTO>> = mutableStateOf(emptyList())
     private val drinksDetails: MutableState<List<SoftDrinkDTO>> = mutableStateOf(emptyList())
 
-    val menuDetails = _menuDetails
+   /* val menuDetails = _menuDetails
         .onStart {
             menuOverViewRepository.getHomeOverviewMenu().onEach {
                 if (it is Result.Success) {
@@ -72,14 +72,14 @@ class ArijengOverviewViewModel(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
             false
-        )
- /*   init {
+        )*/
+    init {
         menuOverViewRepository.getHomeOverviewMenu().onEach {
             if (it is Result.Success) {
                 _menuDetails.value = it.data
             }
         }.launchIn(viewModelScope)
-    }*/
+    }
 
     private fun kotaList(): List<ItemDTO> {
         _menuDetails.value.let {

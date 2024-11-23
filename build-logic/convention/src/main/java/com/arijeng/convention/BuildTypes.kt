@@ -61,9 +61,8 @@ internal fun Project.configureBuildTypes(
 
 private fun BuildType.configureDebugBuildType(apiKey:String){
     //buildConfigField("String","API_KEY", "\"$apiKey\"")
-    buildConfigField("String","BASE_URL", "\"http://192.168.0.31:9091/api/v1\"")
-    //Home ip: 192.168.0.31
-    //office ip: 10.50.113.113
+    buildConfigField("String","BASE_URL", "\"http://172.111.1.45:9091/api/v1\"")
+
 }
 
 private fun BuildType.configureReleaseBuildType(
@@ -71,7 +70,7 @@ private fun BuildType.configureReleaseBuildType(
     apiKey: String
 ) {
     buildConfigField("String", "API_KEY", "\"$apiKey\"")
-    buildConfigField("String", "BASE_URL", "\"https://arijeng-app.herokuapp.com/api/v1/\"")
+    buildConfigField("String", "BASE_URL", "\"https://test.com/api/v1/\"")
 
     isMinifyEnabled = true
     proguardFiles(

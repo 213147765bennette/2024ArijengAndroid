@@ -1,5 +1,6 @@
 plugins {
-    alias(libs.plugins.arijeng.android.feature.ui)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
 android {
@@ -8,6 +9,7 @@ android {
 
 dependencies {
 
+    implementation(libs.sms.retriever)
     implementation(projects.core.domain)
     implementation(projects.auth.domain)
 }

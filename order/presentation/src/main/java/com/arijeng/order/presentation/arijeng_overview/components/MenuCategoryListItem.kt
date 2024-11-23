@@ -234,6 +234,7 @@ private fun MenuCategoryFilterChip(
             .padding(top = 16.dp, bottom = 16.dp)
             .clip(RoundedCornerShape(15.dp))
     ) {
+
         itemsIndexed(filterMenuItems){ index, menuCategory->
             Column(
                 modifier = modifier
@@ -573,7 +574,7 @@ private fun KotaMealsCategoryRow(
             itemsIndexed(lazyItems) {index, item ->
                 MealDetailsCardRow(index,onAction,productItem = item){
                     sharedViewModel.setArijengItem(it)
-                    onAction(ArijengOverviewAction.OnCardItemClick)
+                    //onAction(ArijengOverviewAction.OnCardItemClick)
                     Log.d("OVER_VIEW_SCREEN", "set arijeng item here...")
                 }
             }

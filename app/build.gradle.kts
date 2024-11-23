@@ -25,6 +25,9 @@ android {
 
 dependencies {
 
+    //SMS
+    implementation(libs.sms.retriever)
+
     // Coil
     implementation(libs.coil.compose)
 
