@@ -17,5 +17,5 @@ data class OTPState(
     val otpFieldThree: TextFieldState = TextFieldState(),
     val otpFieldFour: TextFieldState = TextFieldState(),
     val isOTPConfirming: Boolean = false,
-    val canConfirmOTP: Boolean = false,
+    val canConfirmOTP: Boolean = false
 )

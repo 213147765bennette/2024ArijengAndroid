@@ -49,7 +49,7 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController){
             IntroScreenRoot(
                 onSignUpClick = {
                     //navController.navigate("register")
-
+                    //navController.navigate("otp")
                     //This one is for testing
                     navController.navigate("home_overview")
 

@@ -43,7 +43,8 @@ class OTPViewModel(
     var state by mutableStateOf(OTPState())
         private set
 
-    private var otpCode: String = ""
+    private val _otp = MutableStateFlow("")
+    val otpCode = _otp.asStateFlow()
 
     //send the event from viewmodel to the ui
     private val eventChannel = Channel<OTPEvent>()
@@ -74,10 +75,14 @@ class OTPViewModel(
         }
     }
 
+    fun updateOtp(otpValue: String) {
+        _otp.value = otpValue
+        Log.d("OTP_VERIFICATION","otp value from auto sms: ${_otp.value}")
+    }
     private fun confirmOTP() {
         viewModelScope.launch {
             state = state.copy(isOTPConfirming = true)
-            otpCode =
+            _otp.value =
                 state.otpFieldOne.text.toString() + state.otpFieldTwo.text.toString() + state.otpFieldThree.text.toString() + state.otpFieldFour.text.toString()
             val result = authRepository.verifyOTP(
                 mobileNumber = sessionStorage.getUserInfo()?.phone ?: "",
